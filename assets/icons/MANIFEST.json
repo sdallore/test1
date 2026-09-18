@@ -1,0 +1,112 @@
+{
+  "backpack": {
+    "file": "backpack-bold.svg",
+    "note": "backpack",
+    "pack": "phosphor"
+  },
+  "ballotbox": {
+    "file": "list-checks-bold.svg",
+    "note": "checklist ballot",
+    "pack": "phosphor"
+  },
+  "books": {
+    "file": "books-bold.svg",
+    "note": "stack of books",
+    "pack": "phosphor"
+  },
+  "casserole": {
+    "file": "cooking-pot-bold.svg",
+    "note": "cooking pot",
+    "pack": "phosphor"
+  },
+  "chair": {
+    "file": "armchair-bold.svg",
+    "note": "armchair",
+    "pack": "phosphor"
+  },
+  "compost": {
+    "file": "plant-bold.svg",
+    "note": "sprout",
+    "pack": "phosphor"
+  },
+  "district": {
+    "file": "map-trifold-bold.svg",
+    "note": "folded map",
+    "pack": "phosphor"
+  },
+  "door": {
+    "file": "door-bold.svg",
+    "note": "door",
+    "pack": "phosphor"
+  },
+  "groupchat": {
+    "file": "chats-bold.svg",
+    "note": "chat bubbles",
+    "pack": "phosphor"
+  },
+  "houses": {
+    "file": "house-line-bold.svg",
+    "note": "house",
+    "pack": "phosphor"
+  },
+  "hydrant": {
+    "file": "fire-hydrant.svg",
+    "note": "fire hydrant",
+    "pack": "tabler"
+  },
+  "ladder": {
+    "file": "ladder-bold.svg",
+    "note": "ladder",
+    "pack": "phosphor"
+  },
+  "librarycard": {
+    "file": "identification-card-bold.svg",
+    "note": "card",
+    "pack": "phosphor"
+  },
+  "mailbox": {
+    "file": "mailbox-bold.svg",
+    "note": "mailbox",
+    "pack": "phosphor"
+  },
+  "porchlight": {
+    "file": "lamp-pendant-bold.svg",
+    "note": "hanging lamp",
+    "pack": "phosphor"
+  },
+  "posterboard": {
+    "file": "presentation-bold.svg",
+    "note": "presentation board",
+    "pack": "phosphor"
+  },
+  "seal": {
+    "file": "certificate-bold.svg",
+    "note": "certificate seal",
+    "pack": "phosphor"
+  },
+  "shovel": {
+    "file": "shovel-bold.svg",
+    "note": "shovel",
+    "pack": "phosphor"
+  },
+  "table": {
+    "file": "picnic-table-bold.svg",
+    "note": "picnic table",
+    "pack": "phosphor"
+  },
+  "tray": {
+    "file": "bowl-food-bold.svg",
+    "note": "bowl of food",
+    "pack": "phosphor"
+  },
+  "tree": {
+    "file": "tree-bold.svg",
+    "note": "tree",
+    "pack": "phosphor"
+  },
+  "wateringcan": {
+    "file": "potted-plant-bold.svg",
+    "note": "potted plant",
+    "pack": "phosphor"
+  }
+}
