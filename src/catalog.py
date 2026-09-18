@@ -29,7 +29,8 @@ VALID_TONES = {"warm", "wry", "earnest", "sharp"}
 VALID_MOTIFS = {
     "shovel", "wateringcan", "porchlight", "posterboard", "seal", "books",
     "chair", "librarycard", "ladder", "tree", "hydrant", "casserole",
-    "mailbox", "tray", "houses", "ballotbox", "table", "door", "none",
+    "mailbox", "tray", "houses", "ballotbox", "table", "door",
+    "district", "groupchat", "backpack", "compost", "none",
 }
 
 

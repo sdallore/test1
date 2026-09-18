@@ -1,4 +1,9 @@
 {
+  "backpack": {
+    "file": "backpack-bold.svg",
+    "note": "backpack",
+    "pack": "phosphor"
+  },
   "ballotbox": {
     "file": "list-checks-bold.svg",
     "note": "checklist ballot",
@@ -19,9 +24,24 @@
     "note": "armchair",
     "pack": "phosphor"
   },
+  "compost": {
+    "file": "plant-bold.svg",
+    "note": "sprout",
+    "pack": "phosphor"
+  },
+  "district": {
+    "file": "map-trifold-bold.svg",
+    "note": "folded map",
+    "pack": "phosphor"
+  },
   "door": {
     "file": "door-bold.svg",
     "note": "door",
+    "pack": "phosphor"
+  },
+  "groupchat": {
+    "file": "chats-bold.svg",
+    "note": "chat bubbles",
     "pack": "phosphor"
   },
   "houses": {

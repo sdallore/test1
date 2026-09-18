@@ -97,14 +97,24 @@ current US guidance, so a competitor can legally copy a winner
 (`02-legal-guardrails.md`), and raster output needs real cleanup before it is
 printable.
 
-A prompt shape that produces printable results:
+`src/prompts.py` generates the prompts for you, one per design, in
+Midjourney / DALL-E / Stable Diffusion / generic flavours:
 
-> flat vector illustration of a **[subject]**, bold uniform outlines, two flat
-> colours, no gradients, no shading, no drop shadows, no texture, plain white
-> background, centred, full object in frame, screen-print poster style
+```bash
+python3 src/prompts.py --format dalle --out build/prompts.md
+python3 src/prompts.py --tiers A --format midjourney
+```
 
-The negative constraints matter more than the positive ones. Gradients, soft
-shadows, glows and texture are the things that ruin a DTF underbase.
+Per-design subjects live in `catalog/art-prompts.csv`; the shared style block
+lives in the script, so every design comes back in the same visual language.
+The negative constraints matter more than the positive ones — gradients, soft
+shadows, glows and texture are exactly what ruin a DTF underbase, and a test
+asserts the style block still bans them.
+
+Two practical rules the generated file repeats: generate at the largest size
+the tool offers (12in at 300 DPI is 3600px, and upscaling adds mush, not
+detail), and pick the variation with the **cleanest edges** rather than the
+most detail, because detail is what breaks in DTF.
 
 **2. Commission an illustrator.** $50–150 per design on the usual marketplaces.
 For the twelve tier A designs that is roughly $600–1,800. You get art nobody

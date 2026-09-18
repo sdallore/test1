@@ -117,6 +117,9 @@ python3 src/art.py --contact-sheet      # all 30 on one page, for picking
 python3 src/art.py --tiers A            # just the launch set
 python3 src/art.py --ink "#1b3a2f"      # same art, different single ink
 python3 src/art.py --art-dir my-art/    # your own art overrides the vendored set
+
+# Prompts for generating your own art
+python3 src/prompts.py --format dalle --out build/prompts.md
 ```
 
 Vector rather than raster, and one colour, for printing reasons rather than
@@ -126,11 +129,22 @@ because duotone uses `opacity="0.2"` and partial opacity is what gives DTF a
 speckled white underbase. A test asserts no vendored asset carries it.
 
 **These icons are a floor, not a ceiling.** They are clean and generic, and
-nothing about them is yours. `docs/04-artwork-spec.md` covers three ways up —
-AI-generated cartoon art, a commissioned illustrator, or public-domain source
-art — with the licensing rule for each and the prep steps to get any of them
-into `--art-dir`. Commissioning is the recommendation for a brand you intend to
-keep: it is the only route that ends with you owning the copyright.
+nothing about them is yours.
+
+`src/prompts.py` emits a ready-to-paste image-generation prompt for all 30
+designs, in Midjourney, DALL-E, Stable Diffusion or generic flavours. The
+per-design subjects live in
+[`catalog/art-prompts.csv`](catalog/art-prompts.csv); the shared style block
+lives in the script so every design stays visually consistent.
+
+The negative constraints are doing the real work. Image generators default to
+gradients, soft shading and drop shadows, and each of those becomes a speckled
+white underbase on a DTF print — so the style block bans them explicitly, and a
+test asserts it still does. Generated art needs background removal, alpha
+hardening and vector tracing before it is printable; the steps are in the
+generated file and in `docs/04-artwork-spec.md`, which also covers the two
+other routes up (commissioned illustration, public-domain source art) and the
+licensing rule for each.
 
 **One manual step before printing:** the type is `<text>`, so it reflows on a
 machine without the font. Convert text to outlines in a vector editor, and

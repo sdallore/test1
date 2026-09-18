@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT / "src"))
 import catalog  # noqa: E402
 import risk_check  # noqa: E402
 import art  # noqa: E402
+import prompts  # noqa: E402
 import shopify_export  # noqa: E402
 from economics import Economics  # noqa: E402
 
@@ -338,3 +339,57 @@ class TestArt(unittest.TestCase):
         self.assertEqual(len(names), len(set(names)))
         for n in names:
             self.assertRegex(n, r"^D\d+-[a-z0-9-]+\.svg$")
+
+
+class TestPrompts(unittest.TestCase):
+    def setUp(self):
+        self.designs = catalog.load()
+        self.subjects = prompts.load_subjects()
+
+    def test_every_design_has_a_subject(self):
+        for d in self.designs:
+            self.assertIn(d.id, self.subjects, f"{d.id} has no art subject")
+
+    def test_no_orphan_subjects(self):
+        ids = {d.id for d in self.designs}
+        self.assertEqual(set(self.subjects) - ids, set())
+
+    def test_subjects_are_concrete(self):
+        for did, subject in self.subjects.items():
+            self.assertGreater(len(subject.split()), 3, f"{did} subject is too thin")
+
+    def test_no_subject_asks_for_text(self):
+        # The style block forbids text; a subject naming words, numbers or a
+        # date would fight it and the generator would render garbled letters.
+        banned = ("house number", "sign reading", "labelled", "labeled",
+                  "due date", "stamped on it", "spelling", "written")
+        for did, subject in self.subjects.items():
+            for word in banned:
+                self.assertNotIn(word, subject.lower(), f"{did} asks for text: {word!r}")
+
+    def test_every_format_builds_a_prompt(self):
+        for fmt in ("generic", "midjourney", "dalle", "sd"):
+            out = prompts.build("a fire hydrant", fmt)
+            self.assertIn("fire hydrant", out)
+            self.assertGreater(len(out), 80)
+
+    def test_style_block_forbids_what_breaks_dtf(self):
+        for killer in ("no gradients", "no shading", "no drop shadows",
+                       "no texture", "no text"):
+            self.assertIn(killer, prompts.STYLE)
+
+    def test_negative_prompt_covers_partial_opacity(self):
+        self.assertIn("semi-transparent", prompts.NEGATIVE)
+
+    def test_midjourney_gets_its_flags(self):
+        out = prompts.build("a ladder", "midjourney")
+        self.assertIn("--no", out)
+        self.assertIn("--ar 1:1", out)
+
+    def test_markdown_names_the_output_filename(self):
+        rows = [(d, self.subjects[d.id],
+                 prompts.build(self.subjects[d.id], "generic"))
+                for d in self.designs[:3]]
+        md = prompts.render_markdown(rows, "generic")
+        for d, _, _ in rows:
+            self.assertIn(f"`{d.motif}.svg`", md)
