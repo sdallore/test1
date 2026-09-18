@@ -31,8 +31,28 @@ protectable under current US guidance, so designs can be copied legally. The
 moat is brand, audience, and speed of the next drop.
 
 **The joke is the product.** Without ads, a shirt nobody screenshots gets no
-traffic. Twenty genuinely funny designs beat five hundred mediocre ones, and
-that ratio is why the catalog is small on purpose.
+traffic. Thirty good designs beat five hundred mediocre ones, and that ratio is
+why the catalog is small on purpose.
+
+## The voice
+
+Warm, not snarky. The category default is the dig — the dunk, the eye-roll, the
+approval-rating joke. It sells only to people who already agree, and in a
+category with no paid advertising that costs real reach, because the person who
+shares your shirt has to be willing to be seen in it at work.
+
+So the designs state a value warmly and let it disarm. *Shovel The Whole Block*
+is a political position. *Nobody Asks The Fire Department For A Copay* makes a
+universal-healthcare argument a skeptic can finish reading. Neither names an
+enemy.
+
+Two rules hold the voice in place, and both are enforced in code:
+
+- **No politician names or faces.** Puns land on ideas — the filibuster,
+  gerrymandering, banned books, school lunch.
+- **No children's-media IP.** The warm register pulls toward red cardigans and
+  happy little trees. Those are owned, and warmth is not a defense. Take the
+  feeling, never the catchphrase or the costume.
 
 ## Tooling
 
@@ -60,22 +80,29 @@ python3 -m unittest discover -s tests -v
 
 ## The catalog
 
-[`catalog/designs.csv`](catalog/designs.csv) holds 28 designs, each tagged with
-a theme, a legal risk level, a risk note, and a market saturation estimate.
+[`catalog/designs.csv`](catalog/designs.csv) holds 36 designs, each tagged with
+a theme, a **tone**, a legal risk level, a risk note, and a saturation estimate.
 
-- **Tier A (11)** — launch set. Low legal risk, strongest jokes, clean scanner.
-- **Tier B (10)** — second drop, once tier A shows which themes sell.
-- **Tier C (7)** — experimental or risky. Three are marked high risk and the
-  exporter refuses to build products for them.
+- **Tier A (12)** — launch set. *Shovel The Whole Block*, *I'd Water Your
+  Plants*, *Somebody Planted The Tree You're Sitting Under*, *Nobody Asks The
+  Fire Department For A Copay*, *Democracy Is A Group Project*, *There's Room*.
+- **Tier B (14)** — second drop, once tier A shows which themes sell.
+- **Tier C (10)** — quieter or narrower. Cheap to test, easy to cut.
 
-Designs are deliberately puns on *ideas* — bootstraps, the Electoral College,
-the filibuster, banned books — and never on a politician's name or face. That
-rule is what keeps legal risk near zero, and it's enforced by
-`src/risk_check.py` and by a catalog validation rule that rejects any tier A
-design marked high risk.
+The `tone` column tracks the register: **warm** (offers something — *I'd Water
+Your Plants*), **wry** (argues lightly — *Democracy Is A Group Project*), or
+**earnest** (says it plainly — *There's Room*). A fourth value, **sharp**,
+exists so a dig can be recorded, but `src/catalog.py` refuses to let a sharp
+design sit in tier A. Digs never lead a launch.
+
+Every design in the catalog currently scans as low legal risk. That is a
+direct result of the voice: warm designs don't reference people or marks.
 
 Adding a design: append a row to the CSV, run `python3 src/catalog.py` to
-validate it and `python3 src/risk_check.py "<slogan>"` to scan it.
+validate it and `python3 src/risk_check.py "<slogan>"` to scan it. The scanner
+draws the line the brand depends on — *"We're All Neighbors"* comes back clear,
+*"Won't You Be My Neighbor"* comes back high risk. It cannot see artwork, so
+visual homage still needs human eyes.
 
 ## Immediate next steps
 

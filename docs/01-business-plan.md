@@ -18,31 +18,62 @@ The scarce input is taste. That stays with you.
 
 ## Positioning
 
-**Audience:** progressive-leaning, terminally online, 25–45, buys merch as
-identity signaling and as a gift.
+**Audience:** progressive-leaning, 28–55, buys merch as a way of saying
+something in public without starting an argument. Skews toward teachers,
+librarians, nurses, parents, and people who go to the town meeting.
 
-**Voice:** dry and literate. Wordplay, dictionary jokes, understatement. The
-kind of thing worn by someone who would be embarrassed by an all-caps slogan.
+**Voice: warm, not snarky.** This is the decision everything else follows
+from. The category default is the dig — the dunk, the eye-roll, the
+approval-rating joke. It sells to people who already agree and it reads as
+hostile to everyone else, which in a category with no paid advertising is a
+real cost, because the person who shares your shirt has to be willing to be
+seen in it at work.
 
-**Deliberately not:** rage-bait, politician faces, all-caps declarations,
-anything that reads as a bumper sticker. That segment is saturated, it is the
-legally riskiest, and it commands a lower price.
+The alternative is to state the value warmly and let it disarm. *Shovel The
+Whole Block* is a political position. *Nobody Asks The Fire Department For A
+Copay* makes a universal-healthcare argument that a skeptic can finish reading
+without going defensive. Neither one names an enemy.
 
-**Price point:** $32 base. Premium-adjacent, on a soft retail blank. Underpricing
-here is a trap — see the economics below.
+**The three registers**, tracked in the catalog's `tone` column:
+
+| Tone | What it does | Example |
+|---|---|---|
+| **warm** | Offers something. Small, concrete, generous. | *I'd Water Your Plants* |
+| **wry** | Makes the argument with a light touch. | *Democracy Is A Group Project* |
+| **earnest** | Says the thing plainly, no joke at all. | *There's Room* |
+
+A fourth tone, **sharp**, exists in the vocabulary so an idea can be recorded —
+but `src/catalog.py` rejects any sharp design placed in tier A. Digs never lead
+a launch.
+
+**Deliberately not:** politician names or faces, all-caps declarations,
+rage-bait, dunks, anything that would embarrass the wearer in a checkout line.
+
+**The nostalgia line.** The warm register pulls hard toward beloved
+children's media, and that is a trap — see `02-legal-guardrails.md`. Take the
+*feeling* of those references. Never the character, the catchphrase, or the
+costume.
+
+**Price point:** $32 base on a soft retail blank. Underpricing is a trap; see
+below.
 
 ### Name candidates
 
-All play on "left." Check USPTO and domain availability before committing;
-`Left Field Supply Co` is the placeholder in `src/shopify_export.py`.
+The earlier shortlist punned on "left" — *Sinister Goods*, *Gauche & Co.* Those
+are clever and cold, and they fight the voice. A warm brand needs a warm name.
 
-| Name | The joke |
+| Name | The idea |
 |---|---|
-| **Sinister Goods** | *Sinister* is Latin for "left." Dry, memorable, slightly gothic. |
-| **Gauche & Co.** | French for "left," English for "tactless." Doubles perfectly. |
-| **Port Side Press** | Nautical "left." Reads like a small publisher. |
-| **Bleeding Heart Textiles** | Reclaims the insult. Warmest of the four. |
-| **Left Field Supply Co.** | Plain, safe, slightly generic. |
+| **Kind Regards** | An email signoff and a mission statement. Wry and warm at once, and it signs every package insert and newsletter for free. Strongest candidate. |
+| **The Porch Light Co.** | Welcome, stated as an object. Ties directly to the catalog's best warm designs. |
+| **Bleeding Heart Textiles** | Reclaims the insult cheerfully. The most self-aware option. |
+| **Block Party Press** | Community and a small publisher in two words. |
+| **The Long Table** | Quiet, inclusive, a little literary. |
+
+Check USPTO and domains before committing. One specific caution: avoid
+*Good Neighbor* — "Like a good neighbor" is a long-standing insurance slogan
+and the mark is enforced. `Kind Regards` is the placeholder vendor name in
+`src/shopify_export.py`.
 
 ## Unit economics
 

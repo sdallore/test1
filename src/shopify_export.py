@@ -27,7 +27,7 @@ SIZES = ["S", "M", "L", "XL", "2XL"]
 COLORS = ["Black", "White"]
 SIZE_UPCHARGE = {"2XL": 2.00, "3XL": 4.00}
 
-VENDOR = "Left Field Supply Co"
+VENDOR = "Kind Regards"
 PRODUCT_TYPE = "T-Shirt"
 GRAMS = 170
 
@@ -54,20 +54,21 @@ BODY_TEMPLATE = """<p><strong>{slogan}</strong></p>
 <p><em>Order by October 25 to have it before Election Day.</em></p>"""
 
 BLURBS = {
-    "economy": "For anyone who has been told to pull harder on a strap that was never in the box.",
-    "democracy": "Civics class, but funnier and considerably more urgent.",
-    "books": "Worn by people who checked the book out anyway.",
+    "neighbors": "Neighborliness is a small, boring, repeated act. This is one of them.",
+    "community": "For people who show up with a dish and stay to help clean up.",
+    "welcome": "An open door says more than an argument does.",
+    "inclusion": "There is enough room. There was always enough room.",
+    "empathy": "A reminder that the person you are arguing about is a person.",
+    "legacy": "For people planting things they will not be around to sit under.",
+    "publicgoods": "The things we built together, worn by someone who noticed.",
+    "healthcare": "The argument, made quietly and without raising anyone's blood pressure.",
+    "education": "For the people doing the actual work, and the kids they feed.",
+    "books": "Worn by someone who checked the book out anyway.",
+    "democracy": "Civics class, but warmer and considerably more urgent.",
+    "labor": "Nobody did it alone. Somebody should say so on a shirt.",
+    "climate": "The long view, printed on cotton.",
     "science": "Peer-reviewed opinions only.",
-    "labor": "Somebody has to say it at the company picnic.",
-    "climate": "The planet is not a partisan issue, but the policy sure is.",
-    "guns": "Says the quiet part out loud, on cotton.",
-    "education": "For the people doing the actual work.",
-    "lgbtq": "A grammar lesson and a statement in one.",
-    "tech": "Built for the people who read the terms of service.",
-    "history": "You have seen this movie. You know how it ends.",
-    "media": "Read past the headline.",
-    "culture": "Wear it before somebody tries to ban it.",
-    "reproductive": "Bodily autonomy, printed plainly.",
+    "values": "Says the kind part out loud.",
 }
 
 
@@ -88,7 +89,7 @@ def price_for(base: float, size: str) -> float:
 def rows_for(design: Design, base_price: float, publish: bool) -> list[dict]:
     handle = handle_for(design.slogan)
     blurb = BLURBS.get(design.theme, "Made for people who pay attention.")
-    tags = ", ".join(sorted({design.theme, design.tier, "political", "unisex", design.format}))
+    tags = ", ".join(sorted({design.theme, design.tone, design.tier, "unisex", design.format}))
 
     rows: list[dict] = []
     first = True

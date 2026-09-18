@@ -43,12 +43,29 @@ class TestCatalog(unittest.TestCase):
 
     def test_validate_catches_a_bad_row(self):
         bad = catalog.Design(
-            id="X1", slogan="x", theme="t", format="punchline",
+            id="X1", slogan="x", theme="t", tone="sharp", format="punchline",
             tier="A", risk="high", risk_note="", saturation="low",
         )
         problems = catalog.validate([bad])
         self.assertTrue(any("tier A cannot carry high legal risk" in p for p in problems))
         self.assertTrue(any("needs a risk note" in p for p in problems))
+
+    def test_tier_a_rejects_a_sharp_tone(self):
+        sharp = catalog.Design(
+            id="X2", slogan="x", theme="t", tone="sharp", format="punchline",
+            tier="A", risk="low", risk_note="fine", saturation="low",
+        )
+        problems = catalog.validate([sharp])
+        self.assertTrue(any("leads with warmth" in p for p in problems))
+
+    def test_every_design_has_a_valid_tone(self):
+        for d in self.designs:
+            self.assertIn(d.tone, catalog.VALID_TONES, f"{d.id} has tone {d.tone!r}")
+
+    def test_launch_set_carries_no_digs(self):
+        for d in self.designs:
+            if d.tier == "A":
+                self.assertNotEqual(d.tone, "sharp", f"{d.id} is a dig in the launch set")
 
 
 class TestRiskCheck(unittest.TestCase):
@@ -65,7 +82,22 @@ class TestRiskCheck(unittest.TestCase):
         self.assertTrue(any(f.category == "trademark" for f in flags))
 
     def test_clean_slogan_is_clear(self):
-        self.assertEqual(risk_check.scan("Bootstraps Sold Separately"), [])
+        self.assertEqual(risk_check.scan("Shovel The Whole Block"), [])
+
+    def test_flags_a_childrens_media_catchphrase(self):
+        flags = risk_check.scan("Won't You Be My Neighbor")
+        self.assertTrue(any(f.category == "nostalgia-ip" for f in flags))
+        self.assertEqual(flags[0].severity, "high")
+
+    def test_flags_a_childrens_media_character(self):
+        self.assertTrue(
+            any(f.category == "nostalgia-ip" for f in risk_check.scan("Ask Big Bird"))
+        )
+
+    def test_generic_neighbor_language_is_clear(self):
+        # The line the brand walks: the sentiment is free, the catchphrase is not.
+        self.assertEqual(risk_check.scan("We're All Neighbors"), [])
+        self.assertEqual(risk_check.scan("Leave The Porch Light On"), [])
 
     def test_worst_severity_sorts_first(self):
         flags = risk_check.scan("Nike Presents Trump")
@@ -114,6 +146,21 @@ class TestShopifyExport(unittest.TestCase):
 
     def test_handle_strips_apostrophes(self):
         self.assertEqual(shopify_export.handle_for("I'm With The Banned"), "i-m-with-the-banned")
+
+    def test_handle_strips_trailing_punctuation(self):
+        self.assertEqual(
+            shopify_export.handle_for("Feed The Kids. That's The Whole Policy."),
+            "feed-the-kids-that-s-the-whole-policy",
+        )
+
+    def test_tone_is_carried_into_tags(self):
+        design = next(d for d in catalog.load() if d.tier == "A")
+        rows = shopify_export.rows_for(design, 32.0, publish=False)
+        self.assertIn(design.tone, rows[0]["Tags"])
+
+    def test_every_theme_has_product_copy(self):
+        for d in catalog.load():
+            self.assertIn(d.theme, shopify_export.BLURBS, f"{d.theme} has no blurb")
 
     def test_size_upcharge_applies_to_2xl_only(self):
         self.assertEqual(shopify_export.price_for(32.0, "L"), 32.0)

@@ -5,7 +5,8 @@ anything ambiguous goes to print.
 
 ## The one rule that matters
 
-**Joke about the idea, not about the person.**
+**Joke about the idea, not about the person — and offer something rather
+than score a point.**
 
 Puns on concepts — bootstraps, the Electoral College, the filibuster, banned
 books — carry almost no legal risk. Puns that depend on a specific living
@@ -41,6 +42,37 @@ the product rather than commentary on it.
 enters the catalog.** It is a keyword triage tool, not a clearance search. A
 clean result means nothing matched its tables, not that a design is safe.
 
+### 2b. Children's media IP — the trap specific to a warm voice
+
+This one deserves its own heading because the brand's own tone leads straight
+into it.
+
+A warm, neighborly, slightly nostalgic voice pulls toward the things that
+taught a generation what warmth looks like: a red cardigan, a certain street
+with puppets on it, a soft-spoken painter and his happy little trees. Those are
+owned. Fred Rogers Productions, Sesame Workshop, the Seuss estate, and Bob Ross
+Inc. all enforce aggressively, and they enforce against affectionate homage
+specifically, because affectionate homage is what dilutes a mark.
+
+**Warmth is not a defense.** A tribute is still a commercial use.
+
+The line runs between the sentiment and the signature:
+
+| Free to use | Not free to use |
+|---|---|
+| "We're all neighbors" | "Won't you be my neighbor" |
+| Neighborliness as a theme | A red cardigan on a cartoon figure |
+| Kindness toward children | A specific yellow bird, a specific street |
+| Patience, softness, care | "Happy little trees" |
+
+`src/risk_check.py` flags the catchphrases and character names at high
+severity. It **cannot see artwork**, and that is where most of this risk
+actually lives — a red cardigan with no words on it can evoke a protected
+property perfectly well. Visual homage needs a human looking at it and asking
+one question: *would a reasonable person think the estate licensed this?*
+
+If the answer is maybe, redraw it.
+
 ### 3. Copyright in your own designs — the one that cuts against you
 
 Under current US Copyright Office guidance, material generated purely by AI
@@ -75,6 +107,8 @@ protectable, and it is the thing worth protecting.
 Nothing goes to the printer until all seven are true.
 
 - [ ] No living person's name, likeness, caricature, or signature
+- [ ] No children's-media character, catchphrase, or visual signature —
+      including in the artwork, where the scanner cannot look
 - [ ] No registered campaign slogan, party name, or organization tagline
 - [ ] `src/risk_check.py` returns clear, or a human has reviewed each flag
 - [ ] No third-party logo, font, or image without a commercial license

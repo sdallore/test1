@@ -18,12 +18,17 @@ VALID_TIERS = {"A", "B", "C"}
 VALID_RISK = {"low", "medium", "high"}
 VALID_FORMATS = {"punchline", "definition", "tour-back", "graphic"}
 
+# The brand voice. "sharp" is a dig at an opponent; it is allowed in the
+# catalog so an idea can be recorded, but it never leads a launch.
+VALID_TONES = {"warm", "wry", "earnest", "sharp"}
+
 
 @dataclass(frozen=True)
 class Design:
     id: str
     slogan: str
     theme: str
+    tone: str
     format: str
     tier: str
     risk: str
@@ -63,6 +68,10 @@ def validate(designs: list[Design]) -> list[str]:
             problems.append(f"{d.id}: risk {d.risk!r} not in {sorted(VALID_RISK)}")
         if d.format not in VALID_FORMATS:
             problems.append(f"{d.id}: format {d.format!r} not in {sorted(VALID_FORMATS)}")
+        if d.tone not in VALID_TONES:
+            problems.append(f"{d.id}: tone {d.tone!r} not in {sorted(VALID_TONES)}")
+        if d.tier == "A" and d.tone == "sharp":
+            problems.append(f"{d.id}: tier A leads with warmth, not a dig")
         if not d.risk_note.strip():
             problems.append(f"{d.id}: every design needs a risk note")
         if d.tier == "A" and d.risk == "high":
@@ -90,15 +99,16 @@ def main() -> None:
         print("catalog validates clean")
 
     print("\nBy tier:      ", dict(sorted(Counter(d.tier for d in designs).items())))
+    print("By tone:      ", dict(sorted(Counter(d.tone for d in designs).items())))
     print("By risk:      ", dict(sorted(Counter(d.risk for d in designs).items())))
     print("By theme:     ", dict(sorted(Counter(d.theme for d in designs).items())))
     print(f"Printable now: {sum(d.printable for d in designs)}/{len(designs)}")
 
     shown = [d for d in designs if not args.tier or d.tier == args.tier]
-    print(f"\n{'ID':<6}{'TIER':<6}{'RISK':<8}{'THEME':<14}SLOGAN")
-    print("-" * 78)
+    print(f"\n{'ID':<6}{'TIER':<6}{'TONE':<9}{'THEME':<14}SLOGAN")
+    print("-" * 80)
     for d in shown:
-        print(f"{d.id:<6}{d.tier:<6}{d.risk:<8}{d.theme:<14}{d.slogan}")
+        print(f"{d.id:<6}{d.tier:<6}{d.tone:<9}{d.theme:<14}{d.slogan}")
 
 
 if __name__ == "__main__":

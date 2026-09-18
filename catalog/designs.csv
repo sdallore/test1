@@ -1,29 +1,37 @@
-id,slogan,theme,format,tier,risk,risk_note,saturation
-D001,Bootstraps Sold Separately,economy,punchline,A,low,Original wordplay. No marks or names.,low
-D002,Electoral College Dropout,democracy,punchline,A,low,Riffs an album title as a generic phrase. Title alone is weak TM ground.,low
-D003,I'm With The Banned,books,punchline,A,low,Common library-community phrase. No owner.,medium
-D004,Statistically Significant Dissent,science,punchline,A,low,Original. Strong with the data/science crowd.,low
-D005,I Support The Right To Arm Bears,guns,punchline,A,low,Classic public-domain pun.,medium
-D006,Minimum Wage Maximum Rage,labor,punchline,A,low,Original rhyme. No marks.,low
-D007,Trickle Down Was A Leak,economy,punchline,A,low,Original. Clean economic joke.,low
-D008,GERRYMANDER (v.) To Choose Your Own Voters,democracy,definition,A,low,Dictionary format. Educational and shareable.,low
-D009,Unionize Your Group Chat,labor,punchline,A,low,Original. Very online. High share potential.,low
-D010,Compost The Patriarchy,climate,punchline,A,low,Widely used phrase with no single owner.,high
-D011,Late Stage Capitalism World Tour 2026,economy,tour-back,A,low,Band-tour layout with city list on back. Proven format.,medium
-D012,The Only Wall I Want Is A Firewall,tech,punchline,B,low,Original. Good for the tech-worker segment.,low
-D013,Your Energy Policy Is Carbon Dated,climate,punchline,B,low,Original pun on carbon dating.,low
-D014,In Peer Review We Trust,science,punchline,B,low,Riffs a currency motto which is not protectable.,low
-D015,Dewey Decimate Fascism,books,punchline,B,medium,Dewey Decimal is an OCLC trademark. Use the pun only. Never the logo or the name as a brand.,low
-D016,FILIBUSTER (n.) A Nap Performed Loudly,democracy,definition,B,low,Dictionary format. Original definition text.,low
-D017,Public Libraries The Original Free Market,books,punchline,B,low,Original. Converts well with librarians and teachers.,low
-D018,Weapons Of Mass Instruction,education,punchline,B,low,Long-circulating teacher pun. No owner.,high
-D019,They Is Singular And Always Has Been,lgbtq,punchline,B,low,Grammar-nerd ally shirt. Original phrasing.,low
-D020,Thoughts And Prayers Approval Rating 0%,guns,punchline,B,medium,Tone is sharp. Test before scaling. No legal risk.,medium
-D021,Ctrl Alt Delete The Filibuster,democracy,punchline,B,low,Original. Strong with tech buyers.,low
-D022,Sincerely The Popular Vote,democracy,punchline,C,low,Original. Quieter joke. Test it.,low
-D023,I've Read This Chapter Before,history,punchline,C,low,Subtle. Pairs with a book-spine graphic.,low
-D024,Solidarity Forever Overtime Never,labor,punchline,C,low,Riffs a public-domain labor anthem from 1915.,low
-D025,Wage Against The Machine,labor,punchline,C,high,Direct play on a living band's name. Do not print until counsel clears it.,medium
-D026,Roe Roe Roe Your Vote,reproductive,punchline,C,high,Extremely saturated. Thousands of listings. Skip unless a new visual angle exists.,very high
-D027,Democracy Dies In Dark Mode,media,punchline,C,high,Plays on a newspaper's registered tagline. Legal review required.,low
-D028,Certified Woke Batteries Included,culture,punchline,C,medium,Reappropriation. Depends entirely on execution.,medium
+id,slogan,theme,tone,format,tier,risk,risk_note,saturation
+D001,Shovel The Whole Block,neighbors,warm,punchline,A,low,Original. Civic virtue as a small concrete act.,low
+D002,I'd Water Your Plants,neighbors,warm,punchline,A,low,Original. Neighborliness stated as an offer rather than a position.,low
+D003,Somebody Planted The Tree You're Sitting Under,legacy,earnest,punchline,A,low,Echoes an old proverb with no owner. Original phrasing.,low
+D004,Nobody Asks The Fire Department For A Copay,healthcare,wry,punchline,A,low,Original. Makes the argument without naming an opponent.,low
+D005,Democracy Is A Group Project,democracy,wry,punchline,A,low,Original. The school-project joke lands across the whole audience.,low
+D006,Mutual Aid Is Just Neighboring With Extra Steps,community,wry,punchline,A,low,Original. Defuses a loaded term by making it ordinary.,low
+D007,There's Room,inclusion,earnest,punchline,A,low,Original. Two words. Works on a shirt and on a tote.,low
+D008,Leave The Porch Light On,welcome,warm,punchline,A,low,Original phrasing of a common image. Layered and quiet.,low
+D009,Feed The Kids. That's The Whole Policy.,education,earnest,punchline,A,low,Original. School lunch as a position nobody has to argue with.,low
+D010,The Librarian Trusted You With It,books,warm,punchline,A,low,Original. Trust as the point rather than the ban.,low
+D011,Decency Is A Policy Position,values,wry,punchline,A,low,Original. Sharp without being unkind.,low
+D012,I'm With The Banned,books,wry,punchline,A,low,Common library-community phrase with no single owner.,medium
+D013,Borrow My Ladder,neighbors,warm,punchline,B,low,Original. Oblique and specific. Pairs with a simple line drawing.,low
+D014,Casserole Democracy,community,warm,punchline,B,low,Original. Community as something you carry to someone's door.,low
+D015,The Mail Goes Everywhere,publicgoods,earnest,punchline,B,low,Original. Universal service stated as a plain fact.,low
+D016,Everything Good Was Once A Public Good,publicgoods,earnest,punchline,B,low,Original. Quiet and argumentative at the same time.,low
+D017,Ask Me About My Library Card,books,warm,punchline,B,low,Original. Invites a conversation rather than ending one.,low
+D018,Voting Is A Love Language,democracy,warm,punchline,B,low,Original. Riffs a pop-psych phrase that is not protectable.,medium
+D019,I Brought Snacks To The Polls,democracy,warm,punchline,B,low,Original. Specific and small which is why it works.,low
+D020,Somebody's Kid,empathy,earnest,punchline,B,low,Original. Two words that reframe almost any argument.,low
+D021,The Lunch Lady Knew Everyone's Name,education,warm,punchline,B,low,Original. Nostalgia without borrowing anyone's characters.,low
+D022,Plant Something You Won't See Full Grown,climate,earnest,punchline,B,low,Original. Climate framed as generosity rather than doom.,low
+D023,GERRYMANDER (v.) To Choose Your Own Voters,democracy,wry,definition,B,low,Dictionary format. Original definition text. Educational and shareable.,low
+D024,Unionize Your Group Chat,labor,wry,punchline,B,low,Original. Very online and genuinely funny.,low
+D025,Y'all Means All,inclusion,warm,punchline,B,low,Widely used phrase with no single owner. Fits the voice exactly.,high
+D026,Public Libraries The Original Free Market,books,wry,punchline,B,low,Original. Converts with librarians and teachers.,low
+D027,The Table Got Longer,inclusion,warm,punchline,C,low,Original phrasing of a circulating image. Warm and quiet.,low
+D028,Hold The Door,values,earnest,punchline,C,low,Original. Deliberately ambiguous. Test whether it reads.,low
+D029,Nobody Built It Alone,labor,earnest,punchline,C,low,Original. Quiet version of a contested argument.,low
+D030,"Radical Kindness, Moderate Bedtime",values,warm,punchline,C,low,Original. Self-deprecating and very wearable.,low
+D031,Compost Happens,climate,wry,punchline,C,low,Gentle pun. Low risk and low ambition. Cheap to test.,medium
+D032,FILIBUSTER (n.) A Nap Performed Loudly,democracy,wry,definition,C,low,Dictionary format. Original definition text.,low
+D033,Statistically Significant Dissent,science,wry,punchline,C,low,Original. Narrow audience but they will love it.,low
+D034,They Is Singular And Always Has Been,inclusion,wry,punchline,C,low,Grammar-nerd ally shirt. Original phrasing.,low
+D035,In Peer Review We Trust,science,wry,punchline,C,low,Riffs a currency motto which is not protectable.,low
+D036,Electoral College Dropout,democracy,wry,punchline,C,low,Riffs an album title as a generic phrase. Weak TM ground.,low

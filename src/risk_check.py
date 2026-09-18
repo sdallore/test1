@@ -58,6 +58,21 @@ ORG_TERMS = [
 ]
 
 
+# The trap specific to a warm, nostalgic voice. Beloved children's media is
+# owned by estates and studios that police it aggressively, and the warmer the
+# brand voice gets, the more tempting these references become. A gentle homage
+# is still a commercial use of someone else's property.
+NOSTALGIA_TERMS = [
+    "mister rogers", "mr rogers", "fred rogers", "won't you be my neighbor",
+    "wont you be my neighbor", "neighborhood of make believe", "daniel tiger",
+    "sesame street", "big bird", "elmo", "oscar the grouch", "cookie monster",
+    "bob ross", "happy little", "dr seuss", "the lorax", "cat in the hat",
+    "muppets", "kermit", "charlie brown", "peanuts", "snoopy", "linus",
+    "winnie the pooh", "paddington", "reading rainbow", "schoolhouse rock",
+    "bluey", "the little engine that could",
+]
+
+
 @dataclass(frozen=True)
 class Flag:
     category: str
@@ -79,6 +94,10 @@ RULES: list[tuple[str, list[str], str, str]] = [
     ("org-phrase", ORG_TERMS, "medium",
      "Associated with an advocacy organization. Selling it can imply an "
      "endorsement you do not have."),
+    ("nostalgia-ip", NOSTALGIA_TERMS, "high",
+     "Children's media property. These estates and studios enforce hard, and "
+     "warmth is not a defense: an affectionate homage is still commercial use. "
+     "Take the feeling, never the character, the catchphrase, or the costume."),
 ]
 
 SEVERITY_ORDER = {"high": 0, "medium": 1, "low": 2}
@@ -131,6 +150,9 @@ def main() -> None:
             print(f"        {d.risk_note}")
     print("\nThe scanner only knows the terms in its tables. A clean result")
     print("means nothing was matched, not that a design is safe.")
+    print("\nIt also cannot see artwork. A red cardigan, a yellow raincoat, or a")
+    print("particular shade of blue fur can evoke a protected property with no")
+    print("infringing word anywhere on the shirt. Visual homage needs human eyes.")
 
 
 if __name__ == "__main__":
