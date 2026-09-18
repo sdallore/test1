@@ -59,11 +59,12 @@ VIEWBOX_OVERRIDES = {"hydrant": 24.0}
 # Motifs drawn more than once, side by side, because the slogan is plural.
 REPEATS = {"houses": 2}
 
-_ASSET_CACHE: dict[Path, tuple[str, float, dict[str, str]]] = {}
+_ASSET_CACHE: dict[Path, tuple[str, tuple[float, float], dict[str, str]]] = {}
 
 
-def load_motif(name: str, art_dir: Path | None = None) -> tuple[str, float, dict] | None:
-    """Return (inner markup, viewBox size, paint attributes) for a motif."""
+def load_motif(name: str, art_dir: Path | None = None
+               ) -> tuple[str, tuple[float, float], dict] | None:
+    """Return (inner markup, (width, height), paint attributes) for a motif."""
     for base in ([art_dir] if art_dir else []) + [ASSET_DIR]:
         if base is None:
             continue
@@ -78,10 +79,19 @@ def load_motif(name: str, art_dir: Path | None = None) -> tuple[str, float, dict
         inner = re.sub(r"^.*?<svg[^>]*>", "", raw, flags=re.S)
         inner = re.sub(r"</svg>\s*$", "", inner).strip()
 
-        box = VIEWBOX_OVERRIDES.get(name, 256.0)
+        # Source dimensions, in order of reliability: viewBox, then explicit
+        # width/height. vtracer writes width/height and no viewBox, which used
+        # to fall through to the 256 default and scale the art ~3x too big.
+        default = VIEWBOX_OVERRIDES.get(name, 256.0)
+        box = (default, default)
         m = re.search(r'viewBox="[\d.\-]+ [\d.\-]+ ([\d.]+) ([\d.]+)"', attrs)
         if m:
-            box = max(float(m.group(1)), float(m.group(2)))
+            box = (float(m.group(1)), float(m.group(2)))
+        else:
+            wm = re.search(r'\bwidth="([\d.]+)', attrs)
+            hm = re.search(r'\bheight="([\d.]+)', attrs)
+            if wm and hm:
+                box = (float(wm.group(1)), float(hm.group(1)))
 
         # Carry the source's own paint attributes. Without this a stroke-drawn
         # icon (Tabler sets fill="none" on the <svg>) inherits our fill and
@@ -92,9 +102,20 @@ def load_motif(name: str, art_dir: Path | None = None) -> tuple[str, float, dict
             got = re.search(rf'\b{key}="([^"]*)"', attrs)
             if got:
                 carried[key] = got.group(1)
+        # Art that carries its own colours (a traced illustration) must not be
+        # repainted with the single ink. DTF prints full CMYK in one pass, so
+        # colour costs nothing extra; only screen printing charges per colour.
+        if re.search(r'fill="#(?!000000\b)[0-9a-fA-F]{3,8}"', inner):
+            carried["__full_colour__"] = "1"
+
         _ASSET_CACHE[f] = (inner, box, carried)
         return _ASSET_CACHE[f]
     return None
+
+
+def is_full_colour(name: str, art_dir: Path | None = None) -> bool:
+    loaded = load_motif(name, art_dir)
+    return bool(loaded and loaded[2].get("__full_colour__"))
 
 
 def available_motifs(art_dir: Path | None = None) -> set[str]:
@@ -164,13 +185,22 @@ def motif_elements(name: str, ink: str, art_dir: Path | None = None) -> list[str
     loaded = load_motif(name, art_dir)
     if loaded is None:
         return []
-    inner, box, carried = loaded
-    scale = MOTIF_SIZE / box
+    inner, (vw, vh), carried = loaded
+    # Fit the longest side into the motif box and keep the aspect ratio, so
+    # non-square artwork is neither stretched nor overflowed.
+    scale = MOTIF_SIZE / max(vw, vh)
+    draw_w, draw_h = vw * scale, vh * scale
     count = REPEATS.get(name, 1)
     gap = MOTIF_SIZE * 0.14
-    total = count * MOTIF_SIZE + (count - 1) * gap
+    total = count * draw_w + (count - 1) * gap
 
-    paint = dict(carried) or {"fill": "currentColor"}
+    paint = dict(carried)
+    full_colour = paint.pop("__full_colour__", None)
+    if full_colour:
+        # Leave every fill exactly as traced.
+        paint = {}
+    elif not paint:
+        paint = {"fill": "currentColor"}
     # "currentColor" resolves against the group's color, so one ink drives both
     # filled and stroked artwork.
     if paint.get("stroke") == "none":
@@ -180,10 +210,10 @@ def motif_elements(name: str, ink: str, art_dir: Path | None = None) -> list[str
         # clear of the DTF minimum.
         paint["stroke-width"] = f"{max(float(paint.get('stroke-width', 2)), 2.0):.2f}"
     attrs = " ".join(f'{k}="{v}"' for k, v in paint.items())
-    out = [f'<g color="{ink}" {attrs}>']
+    out = [f'<g color="{ink}" {attrs}>'.replace("  ", " ")]
     for i in range(count):
-        x = W / 2 - total / 2 + i * (MOTIF_SIZE + gap)
-        y = MOTIF_CY - MOTIF_SIZE / 2
+        x = W / 2 - total / 2 + i * (draw_w + gap)
+        y = MOTIF_CY - draw_h / 2
         out.append(f'<g transform="translate({x:.1f} {y:.1f}) scale({scale:.5f})">')
         out.append(inner)
         out.append("</g>")

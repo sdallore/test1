@@ -14,3 +14,7 @@ artwork/
 
 # OS
 .DS_Store
+
+# Generated artwork lives here; keep the README, ignore the art itself
+art/*
+!art/README.md

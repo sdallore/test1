@@ -140,18 +140,51 @@ whatever the site calls itself. The three routes above are the clean ones.
 
 ## Getting your own art into the pipeline
 
-Whichever route you pick, the last mile is the same:
+`src/prep_art.py` does the last mile — background, alpha, tracing — in one
+command:
 
-1. Remove the background so it is genuinely transparent, not white.
-2. Harden the alpha — no feathered edges, no semi-transparent pixels.
-3. Trace it to vector (Illustrator Image Trace, Inkscape Trace Bitmap, or a
-   paid vectoriser). Skip this only if the art is already vector.
-4. Save as `<motif>.svg` — the filename must match the `motif` column in
-   `catalog/designs.csv`.
-5. `python3 src/art.py --art-dir my-art/`
+```bash
+python3 src/prep_art.py ~/Downloads/board.webp --motif posterboard
+python3 src/art.py --art-dir art --tiers A
+```
 
-Anything in `--art-dir` overrides the vendored set for that motif, so you can
-upgrade one design at a time and leave the rest working.
+It runs three steps, each fixing something that breaks a print:
+
+1. **Background removal** floods in from the edges rather than keying every
+   white pixel, so white *inside* the artwork survives.
+2. **Alpha hardening** forces every pixel fully opaque or fully clear. This is
+   the one that matters most: a feathered edge is a column of semi-transparent
+   pixels, and the printer turns those into a speckled white underbase. The
+   tool reports how many it fixed.
+3. **Tracing** makes it vector, so it scales to any print size. Generated
+   images are typically ~1024px; a 12in print at 300 DPI needs 3600px.
+
+### The enclosed-white trap
+
+An edge flood cannot reach background walled off by the artwork's own outline —
+the gap between a pair of easel legs, sky inside a window frame. That white
+stays opaque. **It is invisible on a white mockup and prints as white blobs on
+a dark shirt**, which is a defect you will not see until the sample arrives.
+
+`prep_art.py` counts those pixels and warns. Re-run with `--key-white` when the
+art has no intentional white:
+
+```bash
+python3 src/prep_art.py board.webp --motif posterboard --key-white
+```
+
+### Colour is free on DTF
+
+Earlier drafts of this repo called one-colour art "the cheapest thing to
+print". That is **screen-printing logic and it is wrong here.** Screen printing
+charges per colour because each colour is a separate screen. DTF prints a full
+CMYK image plus a white underbase in a single pass, so cost tracks film area,
+not colour count.
+
+Full-colour cartoon art therefore costs the same as one-colour line art. Use
+colour. `art.py` detects artwork that carries its own fills and leaves the
+palette alone; `--ink` then only sets the type colour, which is what you change
+between a light and a dark garment.
 
 ## Where AI fits, honestly## Where AI fits, honestly
 

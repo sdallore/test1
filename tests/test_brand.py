@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT / "src"))
 import catalog  # noqa: E402
 import risk_check  # noqa: E402
 import art  # noqa: E402
+import prep_art  # noqa: E402
 import prompts  # noqa: E402
 import shopify_export  # noqa: E402
 from economics import Economics  # noqa: E402
@@ -257,9 +258,10 @@ class TestArt(unittest.TestCase):
         for name in art.available_motifs():
             loaded = art.load_motif(name)
             self.assertIsNotNone(loaded, f"{name} failed to load")
-            inner, box, _ = loaded
+            inner, (vw, vh), _ = loaded
             self.assertTrue(inner.strip(), f"{name} is empty")
-            self.assertGreater(box, 0)
+            self.assertGreater(vw, 0)
+            self.assertGreater(vh, 0)
 
     def test_assets_carry_no_partial_opacity(self):
         # Semi-transparent pixels give DTF a speckled white underbase, which is
@@ -285,7 +287,7 @@ class TestArt(unittest.TestCase):
             )
             inner, box, _ = art.load_motif("tree", d)
             self.assertIn("rect", inner)
-            self.assertEqual(box, 100.0)
+            self.assertEqual(box, (100.0, 100.0))
 
     def test_every_design_renders_well_formed_svg(self):
         for d in self.designs:
@@ -299,6 +301,44 @@ class TestArt(unittest.TestCase):
     def test_motif_is_placed_at_a_printable_size(self):
         # A motif smaller than a third of the print width is lost on a shirt.
         self.assertGreater(art.MOTIF_SIZE, art.W / 3)
+
+    def test_dimensions_come_from_width_height_when_no_viewbox(self):
+        # vtracer writes width/height and no viewBox; falling through to the
+        # 256 default scaled traced art about 3x too big.
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp)
+            (d / "tree.svg").write_text(
+                '<svg xmlns="http://www.w3.org/2000/svg" width="752" height="662">'
+                '<path d="M0 0 L10 10" fill="#aa3311"/></svg>'
+            )
+            _, box, _ = art.load_motif("tree", d)
+            self.assertEqual(box, (752.0, 662.0))
+
+    def test_non_square_art_keeps_its_aspect_ratio(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp)
+            (d / "tree.svg").write_text(
+                '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400">'
+                '<path d="M0 0 L10 10" fill="#aa3311"/></svg>'
+            )
+            svg = "".join(art.motif_elements("tree", "#141414", d))
+            scale = art.MOTIF_SIZE / 800.0
+            self.assertIn(f"scale({scale:.5f})", svg)
+
+    def test_full_colour_art_is_not_repainted(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp)
+            (d / "tree.svg").write_text(
+                '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">'
+                '<path d="M0 0 L9 9" fill="#f2b33d"/></svg>'
+            )
+            self.assertTrue(art.is_full_colour("tree", d))
+            svg = "".join(art.motif_elements("tree", "#141414", d))
+            self.assertIn("#f2b33d", svg)
+            self.assertNotIn('fill="currentColor"', svg)
+
+    def test_vendored_one_colour_art_still_takes_the_ink(self):
+        self.assertFalse(art.is_full_colour("tree"))
 
     def test_repeated_motifs_render_twice(self):
         d = next(x for x in self.designs if x.motif in art.REPEATS)
@@ -393,3 +433,62 @@ class TestPrompts(unittest.TestCase):
         md = prompts.render_markdown(rows, "generic")
         for d, _, _ in rows:
             self.assertIn(f"`{d.motif}.svg`", md)
+
+
+class TestPrepArt(unittest.TestCase):
+    """The raster -> print-ready-SVG last mile."""
+
+    def setUp(self):
+        from PIL import Image
+        self.Image = Image
+
+    def _card(self):
+        """White field, a solid block, and an enclosed white hole inside it."""
+        img = self.Image.new("RGBA", (60, 60), (255, 255, 255, 255))
+        for x in range(10, 50):
+            for y in range(10, 50):
+                img.putpixel((x, y), (200, 40, 40, 255))
+        for x in range(25, 35):
+            for y in range(25, 35):
+                img.putpixel((x, y), (255, 255, 255, 255))
+        return img
+
+    def test_edge_background_is_removed(self):
+        out = prep_art.strip_background(self._card(), 12)
+        self.assertEqual(out.getpixel((0, 0))[3], 0)
+
+    def test_artwork_survives_background_removal(self):
+        out = prep_art.strip_background(self._card(), 12)
+        self.assertEqual(out.getpixel((15, 15))[3], 255)
+
+    def test_enclosed_white_survives_the_flood(self):
+        # This is the bug that put white blobs on the dark-shirt render: the
+        # flood cannot reach background walled off by the artwork.
+        out = prep_art.strip_background(self._card(), 12)
+        self.assertEqual(out.getpixel((30, 30))[3], 255)
+        self.assertGreater(prep_art.count_enclosed_white(out, 12), 0)
+
+    def test_key_white_clears_the_enclosed_region(self):
+        out = prep_art.strip_background(self._card(), 12)
+        prep_art.key_white(out, 12)
+        self.assertEqual(out.getpixel((30, 30))[3], 0)
+        self.assertEqual(out.getpixel((15, 15))[3], 255)
+
+    def test_alpha_is_hardened_to_fully_on_or_off(self):
+        img = self.Image.new("RGBA", (4, 1), (10, 10, 10, 255))
+        img.putpixel((0, 0), (10, 10, 10, 40))
+        img.putpixel((1, 0), (10, 10, 10, 200))
+        out, softened = prep_art.harden_alpha(img)
+        self.assertEqual(softened, 2)
+        for x in range(4):
+            self.assertIn(out.getpixel((x, 0))[3], (0, 255))
+
+    def test_trim_crops_to_content_and_keeps_a_margin(self):
+        img = self.Image.new("RGBA", (200, 200), (255, 255, 255, 0))
+        for x in range(80, 120):
+            for y in range(80, 120):
+                img.putpixel((x, y), (0, 0, 0, 255))
+        out = prep_art.trim(img)
+        self.assertLess(out.width, 200)
+        # 40px of content plus a 3% margin on each side.
+        self.assertGreater(out.width, 40)

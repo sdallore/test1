@@ -120,6 +120,9 @@ python3 src/art.py --art-dir my-art/    # your own art overrides the vendored se
 
 # Prompts for generating your own art
 python3 src/prompts.py --format dalle --out build/prompts.md
+
+# Generated raster -> print-ready SVG
+python3 src/prep_art.py board.webp --motif posterboard --key-white
 ```
 
 Vector rather than raster, and one colour, for printing reasons rather than
