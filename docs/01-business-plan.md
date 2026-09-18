@@ -18,77 +18,84 @@ The scarce input is taste. That stays with you.
 
 ## Positioning
 
-**Audience:** progressive, well-read, 28–55. Reads long-form, finished the
-book, argues in good faith and enjoys winning. Teachers, librarians, grad
-students, nurses, public-sector workers, the union rep who cites the actual
-statute.
+**Audience:** progressive-leaning, 28–55, buys merch to say something in public
+without starting an argument. Skews toward teachers, librarians, nurses,
+parents, and people who go to the town meeting.
 
-**Voice: barbed, and the barb is an idea.** The shirt cuts, but it cuts by
-knowing something. *MERITOCRACY (n.) Originally A Satire* is an attack and also
-a true fact — Michael Young coined the word in 1958 to mock the concept. The
-cut and the citation are the same sentence, which is what separates this from
-the category default.
+**Voice: warm, with a little clever mixed in.** This is the decision everything
+else follows from.
 
-The category default is the dunk: the eye-roll, the approval-rating joke, the
-insult with no content. That sells to people who already agree and gives a
-critic nothing to engage with. A barbed design invites the argument and wins
-it.
+The category default is the dig — the dunk, the eye-roll, the approval-rating
+joke. It sells to people who already agree and reads as hostile to everyone
+else, which in a category with no paid advertising is a real cost: the person
+who shares your shirt has to be willing to be seen in it at work.
 
-**The five registers**, tracked in the catalog's `tone` column:
+So the designs state a value warmly and let it disarm. *Shovel The Whole Block*
+is a political position. *Nobody Asks The Fire Department For A Copay* makes a
+universal-healthcare argument a skeptic can finish reading without going
+defensive. *Decency Is A Policy Position* is clever without being unkind.
+None of them name an enemy.
+
+**The registers**, tracked in the catalog's `tone` column:
 
 | Tone | What it does | Example |
 |---|---|---|
-| **barbed** | Cuts, and the cut is a fact or an idea. Carries the brand. | *LAFFER CURVE (n.) A Napkin* |
-| **wry** | Argues with a light touch. | *Democracy Is A Group Project* |
-| **earnest** | Says it plainly, no joke. | *There's Room* |
-| **warm** | Offers something. Kept as counterweight. | *The Librarian Trusted You With It* |
-| **sharp** | A dunk with no idea in it. | — |
+| **warm** | Offers something. Small, concrete, generous. Carries the brand. | *I'd Water Your Plants* |
+| **wry** | Argues with a light touch. The clever mixed in. | *Democracy Is A Group Project* |
+| **earnest** | Says it plainly, no joke at all. | *There's Room* |
+| **sharp** | A dunk with no idea in it. Recorded, never launched. | — |
 
-`src/catalog.py` rejects any **sharp** design placed in tier A. Barbed is
-welcome there; an empty dunk is not. That is the whole editorial line.
+`src/catalog.py` rejects any **sharp** design placed in tier A. The catalog
+currently runs 12 warm, 9 wry, 9 earnest — warmth leads, clever supports.
 
-### The literacy tradeoff
+An earlier draft pushed this toward high-brow erudition — Latin tags, Piketty's
+`r > g`, dictionary jokes about the origins of "meritocracy". It was sharper
+and colder, and it traded reach for in-group density, which is the wrong trade
+when being explained at a barbecue is your entire distribution mechanism. The
+git history has it if that direction is ever worth revisiting.
 
-Every design also carries a `literacy` value — what you need to know to get the
-joke. This exists because the brief's two goals pull against each other.
+**Every tier A design ships with art.** Validation enforces it. See the art
+section below.
 
-*Rewards the reader* and *excludes the outsider* feel identical and are not. A
-shirt that makes the wearer feel smart is an asset. A shirt nobody can explain
-at a barbecue does not get explained at a barbecue, and with no paid
-advertising, being explained is the entire distribution mechanism.
+**Deliberately not:** politician names or faces, children's-media IP, all-caps
+declarations, dunks, anything that would embarrass the wearer in a checkout
+line.
 
-So the launch set is built with a spine and a tail:
+**The nostalgia line.** The warm register pulls hard toward beloved children's
+media, and that is a trap — see `02-legal-guardrails.md`. Take the *feeling* of
+those references. Never the character, the catchphrase, or the costume.
 
-- **`general` designs carry reach.** *Decency Is A Policy Position* needs no
-  prior reading. These are the ones that travel and bring people to the store.
-- **Everything else rewards the in-group.** *r > g* is nearly opaque outside
-  it, and that opacity is exactly why the people who get it will buy it.
+**Price point:** $32 base on a soft retail blank. Underpricing is a trap; see
+below.
 
-`src/catalog.py` enforces a floor: at least three `general` designs in tier A,
-or validation fails. Without it a launch set drifts entirely into deep cuts
-and quietly loses its ability to spread.
+### The art
 
-**Deliberately not:** politician names or faces, children's-media IP, living
-theorists by name, all-caps declarations, dunks with no content.
+`src/art.py` draws all 30 designs as one-colour SVG line art — eighteen motifs
+composed from primitives in code. Vector rather than generated raster, because
+DTF punishes soft edges with a speckled underbase and because a drawing
+composed by hand in code is a human authorship story that a generated image is
+not (`02-legal-guardrails.md`).
 
-**Price point:** $32 base on a soft retail blank. This audience is the least
-price-sensitive segment in the category and the most annoyed by a cheap blank.
+Practical consequences: one-colour prints are the cheapest a supplier can run,
+the same file works on a black or a white blank, and re-inking the whole
+catalog is one flag (`--ink`). Run `python3 src/art.py --contact-sheet` to see
+everything on one page before committing to a drop.
 
 ### Name candidates
 
-Earlier shortlists punned on "left" (cold) and then on neighborliness (warm).
-Neither fits a brand whose joke is erudition.
+A warm brand needs a warm name.
 
 | Name | The idea |
 |---|---|
-| **Citation Needed** | Wikipedia's margin note as a brand. Wry, erudite, in-group, and it is the literal promise of a catalog whose designs are all checkable facts. Strongest candidate. |
-| **Marginalia** | What a reader writes in the margin. Quiet and bookish. |
-| **Ibid.** | A footnote joke that fits on a hem tag. |
-| **The Long Read** | Plain, confident, slightly self-aware. |
-| **Kind Regards** | Held over from the warm direction. Still wry, now slightly off-voice. |
+| **Kind Regards** | An email signoff and a mission statement. Wry and warm at once, and it signs every package insert and newsletter for free. Strongest candidate. |
+| **The Porch Light Co.** | Welcome, stated as an object. Ties to the catalog's best warm designs. |
+| **Bleeding Heart Textiles** | Reclaims the insult cheerfully. |
+| **Block Party Press** | Community and a small publisher in two words. |
+| **The Long Table** | Quiet, inclusive, a little literary. |
 
-Check USPTO and domains before committing. `Kind Regards` remains the
-placeholder in `src/shopify_export.py`; switch it once you pick.
+Check USPTO and domains before committing. Avoid *Good Neighbor* — "Like a good
+neighbor" is a long-standing insurance slogan and the mark is enforced.
+`Kind Regards` is the placeholder in `src/shopify_export.py`.
 
 ## Unit economics
 

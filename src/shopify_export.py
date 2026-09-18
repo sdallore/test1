@@ -55,27 +55,20 @@ BODY_TEMPLATE = """<p><strong>{slogan}</strong></p>
 <p><em>Order by October 25 to have it before Election Day.</em></p>"""
 
 BLURBS = {
-    "economy": "For people who read the footnotes and got angry.",
-    "wealth": "The quiet part, quoted from the source.",
-    "debt": "Older than capitalism, and it used to expire.",
-    "power": "Two words that do most of the analytical work.",
-    "democracy": "Civics, for people who stayed awake in the seminar.",
-    "labor": "Somebody organized so you could have this opinion on a weekend.",
-    "land": "The oldest enclosure is still the most expensive one.",
-    "commons": "It was never a tragedy. It was a management problem.",
-    "theory": "Worn by someone who actually finished the book.",
-    "justice": "A thought experiment that gets uncomfortable fast.",
-    "tolerance": "The paradox, resolved decades ago, relitigated daily.",
-    "accountability": "The oldest question about anyone holding power.",
-    "rhetoric": "For arguing on the internet with more precision.",
-    "stats": "Peer-reviewed opinions only.",
-    "science": "Peer-reviewed opinions only.",
-    "media": "Read past the headline, then read who owns it.",
-    "values": "Says the sharp part quietly.",
-    "books": "Worn by someone who checked the book out anyway.",
-    "healthcare": "The argument, made without raising anyone's blood pressure.",
+    "neighbors": "Neighborliness is a small, boring, repeated act. This is one of them.",
+    "community": "For people who show up with a dish and stay to help clean up.",
+    "welcome": "An open door says more than an argument does.",
     "inclusion": "There is enough room. There was always enough room.",
-    "legacy": "For people planting things they will not sit under.",
+    "empathy": "A reminder that the person being argued about is a person.",
+    "legacy": "For people planting things they will not be around to sit under.",
+    "publicgoods": "The things we built together, worn by someone who noticed.",
+    "healthcare": "The argument, made without raising anyone's blood pressure.",
+    "education": "For the people doing the actual work, and the kids they feed.",
+    "books": "Worn by someone who checked the book out anyway.",
+    "democracy": "Civics class, but warmer and considerably more urgent.",
+    "labor": "Nobody did it alone. Somebody should say so on a shirt.",
+    "climate": "The long view, printed on cotton.",
+    "values": "Says the kind part out loud.",
 }
 
 
@@ -97,7 +90,7 @@ def rows_for(design: Design, base_price: float, publish: bool) -> list[dict]:
     handle = handle_for(design.slogan)
     blurb = BLURBS.get(design.theme, "Made for people who pay attention.")
     tags = ", ".join(sorted({
-        design.theme, design.tone, design.tier, design.literacy, "unisex", design.format,
+        design.theme, design.tone, design.tier, design.motif, "unisex", design.format,
     }))
 
     rows: list[dict] = []

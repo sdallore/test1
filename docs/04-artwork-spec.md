@@ -51,6 +51,31 @@ duller. Choose colors you can actually hit.
 washed out. Bold vector-style art is the right answer here, which is also the
 right answer aesthetically for a punchline shirt.
 
+## The generator
+
+`src/art.py` draws every design in the catalog as SVG:
+
+```bash
+python3 src/art.py                      # all designs -> build/art/
+python3 src/art.py --tiers A
+python3 src/art.py --ink "#1b3a2f"      # one-colour print in another ink
+python3 src/art.py --contact-sheet      # every design on one page
+```
+
+Output is one-colour line art on a 12 x 14 in canvas, which is the cheapest
+thing to print and the most forgiving on a blank of any colour. Because it is
+vector, none of the failure modes below apply: no soft edges, no stray pixels,
+no resolution to upscale. The motif stroke is 0.13 in, well clear of the DTF
+minimum, and the tests assert it.
+
+**One manual step before the printer:** the type is `<text>`, so it reflows on
+a machine without the font. Open the SVG in a vector editor and convert text to
+outlines. Everything else is already print-ready.
+
+The `motif` column in the catalog names the drawing. Adding one means writing a
+function in `art.py` and adding its name to `VALID_MOTIFS` in `catalog.py`;
+validation fails if a design names a motif nothing draws.
+
 ## Where AI fits, honestly
 
 - **Excellent:** concept volume, pun variations, alternate phrasings, layout
@@ -62,6 +87,10 @@ The workflow that works: AI for fifty ideas, you pick three, then set the type
 properly in a vector tool and export a clean PNG at 300 DPI. Keep the rejected
 variants; per `02-legal-guardrails.md`, that record is your evidence of human
 authorship.
+
+This is why `src/art.py` draws with code rather than generating images. Vector
+geometry is what DTF wants, and a drawing composed by hand in code is a human
+authorship story that a generated raster is not.
 
 ## Pre-export checklist
 

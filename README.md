@@ -72,6 +72,10 @@ python3 src/catalog.py --tier A
 python3 src/risk_check.py
 python3 src/risk_check.py "Some new slogan idea"
 
+# Draw print-ready SVG artwork for every design
+python3 src/art.py --contact-sheet
+python3 src/art.py --tiers A --ink "#1b3a2f"
+
 # Build a Shopify product import CSV from the catalog
 python3 src/shopify_export.py --tiers A --price 32.00
 
@@ -81,37 +85,49 @@ python3 -m unittest discover -s tests -v
 
 ## The catalog
 
-[`catalog/designs.csv`](catalog/designs.csv) holds 42 designs, each tagged with
-a theme, a **tone**, a **literacy** level, a legal risk level, a risk note, and
-a saturation estimate.
+[`catalog/designs.csv`](catalog/designs.csv) holds 30 designs, each tagged with
+a theme, a **tone**, a **motif**, a legal risk level, a risk note, and a
+saturation estimate.
 
-- **Tier A (14)** — launch set. *MERITOCRACY (n.) Originally A Satire*,
-  *AUSTERITY (n.) A Choice Described As A Weather Event*, *LAFFER CURVE (n.) A
-  Napkin*, *Cui Bono?*, *It's Easier For A Camel*, *The Luddites Were
-  Organizers*, *r > g*.
-- **Tier B (15)** — second drop, once tier A shows which themes sell.
-- **Tier C (13)** — deepest cuts and the warm counterweights. Cheap to test.
+- **Tier A (12)** — launch set. *Shovel The Whole Block*, *I'd Water Your
+  Plants*, *Leave The Porch Light On*, *Democracy Is A Group Project*,
+  *Decency Is A Policy Position*, *There's Room*.
+- **Tier B (10)** — second drop, once tier A shows which themes sell.
+- **Tier C (8)** — quieter or narrower. Cheap to test, easy to cut.
 
-The `tone` column tracks the register — **barbed**, **wry**, **earnest**,
-**warm**, or **sharp**. The `literacy` column tracks what you need to know to
-get the joke: `general`, `econ`, `history`, `classics`, `scripture`, `theory`,
-`stats`, `rhetoric`.
-
-That second column exists because reach and in-group density pull against each
-other. A shirt nobody can explain at a barbecue doesn't get explained at a
-barbecue, and with no paid advertising, being explained is the whole
-distribution mechanism. So `src/catalog.py` enforces a floor: **at least three
-`general`-literacy designs in tier A**, or validation fails. The deep cuts
-reward the people who get them; the legible ones are what carry them there.
+`tone` is the register: **warm** (offers something), **wry** (argues lightly),
+**earnest** (says it plainly), or **sharp** (a dunk with no idea in it).
+`src/catalog.py` refuses to let a sharp design sit in tier A.
 
 Every design currently scans as low legal risk — a direct result of the voice.
-Puns on ideas don't reference people or marks.
+Warm designs don't reference people or marks.
 
-Adding a design: append a row to the CSV, run `python3 src/catalog.py` to
-validate it and `python3 src/risk_check.py "<slogan>"` to scan it. The scanner
-draws the line the brand depends on — *"We're All Neighbors"* comes back clear,
-*"Won't You Be My Neighbor"* comes back high risk. It cannot see artwork, so
-visual homage still needs human eyes.
+## The art
+
+`src/art.py` draws every design as SVG and writes it to `build/art/`. Eighteen
+motifs — a shovel, a ladder, a watering can, a porch light, a casserole dish, a
+tri-fold poster board — composed from primitives in code.
+
+Vector, not raster, and that is a printing decision rather than an aesthetic
+one. [`docs/04-artwork-spec.md`](docs/04-artwork-spec.md) explains what breaks
+in DTF: soft edges and semi-transparent pixels produce a speckled white
+underbase, and an upscaled raster turns to mush. Line art has neither problem,
+scales to any print size, and is the cheapest thing a printer can run. The
+motif stroke is 0.13in, comfortably clear of the DTF minimum, and the tests
+assert it.
+
+```bash
+python3 src/art.py --contact-sheet      # all 30 on one page, for picking
+python3 src/art.py --tiers A            # just the launch set
+python3 src/art.py --ink "#1b3a2f"      # same art, different single ink
+```
+
+`motif` in the catalog names the drawing. Validation fails if a design names a
+motif nothing draws, or if a tier A design has no art at all.
+
+**One manual step before printing:** the type is `<text>`, so it reflows on a
+machine without the font. Convert text to outlines in a vector editor. The rest
+is print-ready.
 
 ## Immediate next steps
 

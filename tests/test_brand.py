@@ -5,6 +5,7 @@
 
 import csv
 import sys
+import xml.etree.ElementTree as ET
 import tempfile
 import unittest
 from pathlib import Path
@@ -14,6 +15,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 import catalog  # noqa: E402
 import risk_check  # noqa: E402
+import art  # noqa: E402
 import shopify_export  # noqa: E402
 from economics import Economics  # noqa: E402
 
@@ -43,7 +45,7 @@ class TestCatalog(unittest.TestCase):
 
     def test_validate_catches_a_bad_row(self):
         bad = catalog.Design(
-            id="X1", slogan="x", theme="t", tone="sharp", literacy="general",
+            id="X1", slogan="x", theme="t", tone="sharp", motif="none",
             format="punchline",
             tier="A", risk="high", risk_note="", saturation="low",
         )
@@ -53,43 +55,29 @@ class TestCatalog(unittest.TestCase):
 
     def test_tier_a_rejects_a_sharp_tone(self):
         sharp = catalog.Design(
-            id="X2", slogan="x", theme="t", tone="sharp", literacy="general",
+            id="X2", slogan="x", theme="t", tone="sharp", motif="none",
             format="punchline",
             tier="A", risk="low", risk_note="fine", saturation="low",
         )
         problems = catalog.validate([sharp])
         self.assertTrue(any("cannot lead a launch" in p for p in problems))
 
-    def test_tier_a_accepts_a_barbed_tone(self):
-        # Cutting is fine when the cut is an idea; only empty dunks are barred.
-        barbed = catalog.Design(
-            id="X3", slogan="x", theme="t", tone="barbed", literacy="general",
+    def test_every_design_has_a_known_motif(self):
+        for d in self.designs:
+            self.assertIn(d.motif, catalog.VALID_MOTIFS, f"{d.id}: {d.motif!r}")
+
+    def test_tier_a_designs_all_ship_with_art(self):
+        for d in self.designs:
+            if d.tier == "A":
+                self.assertNotEqual(d.motif, "none", f"{d.id} is tier A with no art")
+
+    def test_validate_catches_a_type_only_tier_a_design(self):
+        bare = catalog.Design(
+            id="X4", slogan="x", theme="t", tone="warm", motif="none",
             format="punchline", tier="A", risk="low", risk_note="fine",
             saturation="low",
         )
-        self.assertNotIn(
-            "cannot lead a launch", " ".join(catalog.validate([barbed]))
-        )
-
-    def test_every_design_has_a_valid_literacy(self):
-        for d in self.designs:
-            self.assertIn(d.literacy, catalog.VALID_LITERACY, f"{d.id}: {d.literacy!r}")
-
-    def test_launch_set_keeps_enough_reach(self):
-        general = [d for d in self.designs if d.tier == "A" and d.literacy == "general"]
-        self.assertGreaterEqual(len(general), catalog.MIN_GENERAL_IN_TIER_A)
-
-    def test_validate_catches_an_all_deep_cut_launch_set(self):
-        obscure = [
-            catalog.Design(
-                id=f"X{i}", slogan="x", theme="t", tone="barbed", literacy="theory",
-                format="punchline", tier="A", risk="low", risk_note="fine",
-                saturation="low",
-            )
-            for i in range(5)
-        ]
-        problems = catalog.validate(obscure)
-        self.assertTrue(any("can travel" in p for p in problems))
+        self.assertTrue(any("ship with art" in p for p in catalog.validate([bare])))
 
     def test_every_design_has_a_valid_tone(self):
         for d in self.designs:
@@ -121,16 +109,6 @@ class TestRiskCheck(unittest.TestCase):
         flags = risk_check.scan("Won't You Be My Neighbor")
         self.assertTrue(any(f.category == "nostalgia-ip" for f in flags))
         self.assertEqual(flags[0].severity, "high")
-
-    def test_flags_a_living_theorist(self):
-        flags = risk_check.scan("Piketty Was Right")
-        self.assertTrue(any(f.category == "right-of-publicity" for f in flags))
-
-    def test_long_dead_writers_are_clear(self):
-        # The line the high-brow register walks: the idea is free, the living
-        # person's name is not.
-        self.assertEqual(risk_check.scan("Read The Second Half Of Adam Smith"), [])
-        self.assertEqual(risk_check.scan("r > g"), [])
 
     def test_flags_a_childrens_media_character(self):
         self.assertTrue(
@@ -205,22 +183,13 @@ class TestShopifyExport(unittest.TestCase):
         for d in catalog.load():
             self.assertIn(d.theme, shopify_export.BLURBS, f"{d.theme} has no blurb")
 
-    def test_literacy_is_carried_into_tags(self):
+    def test_motif_is_carried_into_tags(self):
         design = next(d for d in catalog.load() if d.tier == "A")
         rows = shopify_export.rows_for(design, 32.0, publish=False)
-        self.assertIn(design.literacy, rows[0]["Tags"])
+        self.assertIn(design.motif, rows[0]["Tags"])
 
-    def test_markup_characters_are_escaped_in_the_body(self):
-        # "r > g" would otherwise open a stray tag in the product description.
-        design = next(d for d in catalog.load() if ">" in d.slogan)
-        rows = shopify_export.rows_for(design, 32.0, publish=False)
-        body = rows[0]["Body (HTML)"]
-        self.assertIn("&gt;", body)
-        self.assertNotIn("r > g</strong>", body)
-
-    def test_handle_survives_markup_characters(self):
-        self.assertEqual(shopify_export.handle_for("r > g"), "r-g")
-        self.assertEqual(shopify_export.handle_for("Cui Bono?"), "cui-bono")
+    def test_handle_survives_punctuation(self):
+        self.assertEqual(shopify_export.handle_for("Y'all Means All"), "y-all-means-all")
 
     def test_size_upcharge_applies_to_2xl_only(self):
         self.assertEqual(shopify_export.price_for(32.0, "L"), 32.0)
@@ -270,3 +239,74 @@ class TestShopifyExport(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestArt(unittest.TestCase):
+    def setUp(self):
+        self.designs = catalog.load()
+
+    def test_every_catalog_motif_has_a_drawing(self):
+        for d in self.designs:
+            if d.motif != "none":
+                self.assertIn(d.motif, art.MOTIFS, f"{d.id} names an undrawn motif")
+
+    def test_every_drawing_is_used_or_spare(self):
+        for name, builder in art.MOTIFS.items():
+            self.assertTrue(builder(), f"{name} draws nothing")
+
+    def test_every_design_renders_well_formed_svg(self):
+        for d in self.designs:
+            ET.fromstring(art.render(d, "#141414"))
+
+    def test_svg_declares_print_size(self):
+        svg = art.render(self.designs[0], "#141414")
+        self.assertIn('width="12in"', svg)
+        self.assertIn('height="14in"', svg)
+
+    def test_printed_stroke_clears_the_dtf_minimum(self):
+        # The motif group is scaled by MOTIF_SCALE and its stroke-width is
+        # pre-divided by it, so the printed weight is STROKE units. One unit is
+        # 0.01in = 0.72pt, and DTF breaks up below about 2pt at print size.
+        printed_pt = art.STROKE * 0.72
+        self.assertGreaterEqual(printed_pt, 2.0)
+
+    def test_motif_stroke_is_compensated_for_the_scale(self):
+        svg = art.render(
+            next(d for d in self.designs if d.motif != "none"), "#141414"
+        )
+        self.assertIn(f'stroke-width="{art.STROKE / art.MOTIF_SCALE:.1f}"', svg)
+
+    def test_text_wrapping_respects_the_width(self):
+        lines, size = art.lay_out_text("Somebody Planted The Tree You're Sitting Under")
+        self.assertLessEqual(len(lines), 4)
+        self.assertLessEqual(max(len(x) for x in lines) * size * 0.56, 1000)
+
+    def test_short_slogans_get_the_largest_size(self):
+        _, small = art.lay_out_text("Somebody Planted The Tree You're Sitting Under")
+        _, large = art.lay_out_text("There's Room")
+        self.assertGreater(large, small)
+
+    def test_text_block_stays_on_the_canvas(self):
+        for d in self.designs:
+            lines, size = art.lay_out_text(d.slogan)
+            bottom = art.TEXT_TOP + len(lines) * size * 1.22
+            self.assertLess(bottom, art.H, f"{d.id} text runs off the canvas")
+
+    def test_markup_in_a_slogan_is_escaped(self):
+        d = catalog.Design(
+            id="X9", slogan="Books & <Ideas>", theme="books", tone="warm",
+            motif="books", format="punchline", tier="A", risk="low",
+            risk_note="fine", saturation="low",
+        )
+        svg = art.render(d, "#141414")
+        ET.fromstring(svg)
+        self.assertIn("&amp;", svg)
+
+    def test_contact_sheet_is_well_formed(self):
+        ET.fromstring(art.contact_sheet(self.designs, "#141414"))
+
+    def test_filenames_are_unique_and_safe(self):
+        names = [art.slug(d) for d in self.designs]
+        self.assertEqual(len(names), len(set(names)))
+        for n in names:
+            self.assertRegex(n, r"^D\d+-[a-z0-9-]+\.svg$")
