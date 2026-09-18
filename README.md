@@ -104,30 +104,37 @@ Warm designs don't reference people or marks.
 
 ## The art
 
-`src/art.py` draws every design as SVG and writes it to `build/art/`. Eighteen
-motifs — a shovel, a ladder, a watering can, a porch light, a casserole dish, a
-tri-fold poster board — composed from primitives in code.
+`assets/icons/` holds one SVG per motif, drawn by professional icon designers —
+**Phosphor** and **Tabler**, both MIT. MIT permits commercial use and
+redistribution and needs no attribution on the product; the licence texts are
+vendored beside the art and `MANIFEST.json` records each source file.
 
-Vector, not raster, and that is a printing decision rather than an aesthetic
-one. [`docs/04-artwork-spec.md`](docs/04-artwork-spec.md) explains what breaks
-in DTF: soft edges and semi-transparent pixels produce a speckled white
-underbase, and an upscaled raster turns to mush. Line art has neither problem,
-scales to any print size, and is the cheapest thing a printer can run. The
-motif stroke is 0.13in, comfortably clear of the DTF minimum, and the tests
-assert it.
+`src/art.py` composes motif and typography onto a 12 x 14 in canvas and writes
+one-colour SVG to `build/art/`.
 
 ```bash
 python3 src/art.py --contact-sheet      # all 30 on one page, for picking
 python3 src/art.py --tiers A            # just the launch set
 python3 src/art.py --ink "#1b3a2f"      # same art, different single ink
+python3 src/art.py --art-dir my-art/    # your own art overrides the vendored set
 ```
 
-`motif` in the catalog names the drawing. Validation fails if a design names a
-motif nothing draws, or if a tier A design has no art at all.
+Vector rather than raster, and one colour, for printing reasons rather than
+aesthetic ones — [`docs/04-artwork-spec.md`](docs/04-artwork-spec.md) has the
+detail. Notably the solid *bold* icon weight is vendored rather than *duotone*,
+because duotone uses `opacity="0.2"` and partial opacity is what gives DTF a
+speckled white underbase. A test asserts no vendored asset carries it.
+
+**These icons are a floor, not a ceiling.** They are clean and generic, and
+nothing about them is yours. `docs/04-artwork-spec.md` covers three ways up —
+AI-generated cartoon art, a commissioned illustrator, or public-domain source
+art — with the licensing rule for each and the prep steps to get any of them
+into `--art-dir`. Commissioning is the recommendation for a brand you intend to
+keep: it is the only route that ends with you owning the copyright.
 
 **One manual step before printing:** the type is `<text>`, so it reflows on a
-machine without the font. Convert text to outlines in a vector editor. The rest
-is print-ready.
+machine without the font. Convert text to outlines in a vector editor, and
+licence a real display font while you are there.
 
 ## Immediate next steps
 

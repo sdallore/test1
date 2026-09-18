@@ -4,6 +4,7 @@
 """
 
 import csv
+import re
 import sys
 import xml.etree.ElementTree as ET
 import tempfile
@@ -245,14 +246,45 @@ class TestArt(unittest.TestCase):
     def setUp(self):
         self.designs = catalog.load()
 
-    def test_every_catalog_motif_has_a_drawing(self):
+    def test_every_catalog_motif_has_an_asset(self):
+        have = art.available_motifs()
         for d in self.designs:
             if d.motif != "none":
-                self.assertIn(d.motif, art.MOTIFS, f"{d.id} names an undrawn motif")
+                self.assertIn(d.motif, have, f"{d.id} names a motif with no art")
 
-    def test_every_drawing_is_used_or_spare(self):
-        for name, builder in art.MOTIFS.items():
-            self.assertTrue(builder(), f"{name} draws nothing")
+    def test_every_asset_loads(self):
+        for name in art.available_motifs():
+            loaded = art.load_motif(name)
+            self.assertIsNotNone(loaded, f"{name} failed to load")
+            inner, box, _ = loaded
+            self.assertTrue(inner.strip(), f"{name} is empty")
+            self.assertGreater(box, 0)
+
+    def test_assets_carry_no_partial_opacity(self):
+        # Semi-transparent pixels give DTF a speckled white underbase, which is
+        # why the solid "bold" weight is vendored rather than "duotone".
+        bad = re.compile(r'opacity="0?[.]\d')
+        for name in art.available_motifs():
+            inner, _, _ = art.load_motif(name)
+            self.assertIsNone(bad.search(inner), f"{name} has partial opacity")
+
+    def test_stroke_drawn_assets_keep_their_fill_none(self):
+        # Dropping the source fill="none" made a stroked icon print solid black.
+        for name in art.available_motifs():
+            _, _, paint = art.load_motif(name)
+            if paint.get("stroke") and paint.get("stroke") != "none":
+                self.assertEqual(paint.get("fill"), "none", f"{name} would fill solid")
+
+    def test_art_dir_overrides_the_vendored_set(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp)
+            (d / "tree.svg").write_text(
+                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'
+                '<rect x="10" y="10" width="80" height="80"/></svg>'
+            )
+            inner, box, _ = art.load_motif("tree", d)
+            self.assertIn("rect", inner)
+            self.assertEqual(box, 100.0)
 
     def test_every_design_renders_well_formed_svg(self):
         for d in self.designs:
@@ -263,18 +295,14 @@ class TestArt(unittest.TestCase):
         self.assertIn('width="12in"', svg)
         self.assertIn('height="14in"', svg)
 
-    def test_printed_stroke_clears_the_dtf_minimum(self):
-        # The motif group is scaled by MOTIF_SCALE and its stroke-width is
-        # pre-divided by it, so the printed weight is STROKE units. One unit is
-        # 0.01in = 0.72pt, and DTF breaks up below about 2pt at print size.
-        printed_pt = art.STROKE * 0.72
-        self.assertGreaterEqual(printed_pt, 2.0)
+    def test_motif_is_placed_at_a_printable_size(self):
+        # A motif smaller than a third of the print width is lost on a shirt.
+        self.assertGreater(art.MOTIF_SIZE, art.W / 3)
 
-    def test_motif_stroke_is_compensated_for_the_scale(self):
-        svg = art.render(
-            next(d for d in self.designs if d.motif != "none"), "#141414"
-        )
-        self.assertIn(f'stroke-width="{art.STROKE / art.MOTIF_SCALE:.1f}"', svg)
+    def test_repeated_motifs_render_twice(self):
+        d = next(x for x in self.designs if x.motif in art.REPEATS)
+        svg = art.render(d, "#141414")
+        self.assertEqual(svg.count('<g transform="translate('), art.REPEATS[d.motif])
 
     def test_text_wrapping_respects_the_width(self):
         lines, size = art.lay_out_text("Somebody Planted The Tree You're Sitting Under")

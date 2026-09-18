@@ -123,6 +123,9 @@ Nothing goes to the printer until all seven are true.
 - [ ] No registered campaign slogan, party name, or organization tagline
 - [ ] `src/risk_check.py` returns clear, or a human has reviewed each flag
 - [ ] No third-party logo, font, or image without a commercial license
+- [ ] Every piece of art traced to a licence that permits commercial use —
+      MIT/CC0/public domain, or a signed copyright assignment. Never a web
+      image search result
 - [ ] Every font used is licensed for commercial print
 - [ ] Design is original wordplay, not lifted from a viral post
 - [ ] `risk_note` in the catalog is filled in with a real assessment
