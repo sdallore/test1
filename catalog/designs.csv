@@ -1,0 +1,29 @@
+id,slogan,theme,format,tier,risk,risk_note,saturation
+D001,Bootstraps Sold Separately,economy,punchline,A,low,Original wordplay. No marks or names.,low
+D002,Electoral College Dropout,democracy,punchline,A,low,Riffs an album title as a generic phrase. Title alone is weak TM ground.,low
+D003,I'm With The Banned,books,punchline,A,low,Common library-community phrase. No owner.,medium
+D004,Statistically Significant Dissent,science,punchline,A,low,Original. Strong with the data/science crowd.,low
+D005,I Support The Right To Arm Bears,guns,punchline,A,low,Classic public-domain pun.,medium
+D006,Minimum Wage Maximum Rage,labor,punchline,A,low,Original rhyme. No marks.,low
+D007,Trickle Down Was A Leak,economy,punchline,A,low,Original. Clean economic joke.,low
+D008,GERRYMANDER (v.) To Choose Your Own Voters,democracy,definition,A,low,Dictionary format. Educational and shareable.,low
+D009,Unionize Your Group Chat,labor,punchline,A,low,Original. Very online. High share potential.,low
+D010,Compost The Patriarchy,climate,punchline,A,low,Widely used phrase with no single owner.,high
+D011,Late Stage Capitalism World Tour 2026,economy,tour-back,A,low,Band-tour layout with city list on back. Proven format.,medium
+D012,The Only Wall I Want Is A Firewall,tech,punchline,B,low,Original. Good for the tech-worker segment.,low
+D013,Your Energy Policy Is Carbon Dated,climate,punchline,B,low,Original pun on carbon dating.,low
+D014,In Peer Review We Trust,science,punchline,B,low,Riffs a currency motto which is not protectable.,low
+D015,Dewey Decimate Fascism,books,punchline,B,medium,Dewey Decimal is an OCLC trademark. Use the pun only. Never the logo or the name as a brand.,low
+D016,FILIBUSTER (n.) A Nap Performed Loudly,democracy,definition,B,low,Dictionary format. Original definition text.,low
+D017,Public Libraries The Original Free Market,books,punchline,B,low,Original. Converts well with librarians and teachers.,low
+D018,Weapons Of Mass Instruction,education,punchline,B,low,Long-circulating teacher pun. No owner.,high
+D019,They Is Singular And Always Has Been,lgbtq,punchline,B,low,Grammar-nerd ally shirt. Original phrasing.,low
+D020,Thoughts And Prayers Approval Rating 0%,guns,punchline,B,medium,Tone is sharp. Test before scaling. No legal risk.,medium
+D021,Ctrl Alt Delete The Filibuster,democracy,punchline,B,low,Original. Strong with tech buyers.,low
+D022,Sincerely The Popular Vote,democracy,punchline,C,low,Original. Quieter joke. Test it.,low
+D023,I've Read This Chapter Before,history,punchline,C,low,Subtle. Pairs with a book-spine graphic.,low
+D024,Solidarity Forever Overtime Never,labor,punchline,C,low,Riffs a public-domain labor anthem from 1915.,low
+D025,Wage Against The Machine,labor,punchline,C,high,Direct play on a living band's name. Do not print until counsel clears it.,medium
+D026,Roe Roe Roe Your Vote,reproductive,punchline,C,high,Extremely saturated. Thousands of listings. Skip unless a new visual angle exists.,very high
+D027,Democracy Dies In Dark Mode,media,punchline,C,high,Plays on a newspaper's registered tagline. Legal review required.,low
+D028,Certified Woke Batteries Included,culture,punchline,C,medium,Reappropriation. Depends entirely on execution.,medium

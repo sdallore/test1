@@ -1,0 +1,16 @@
+# Generated Shopify import files
+build/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Artwork working files (large binaries do not belong in git)
+artwork/
+*.psd
+*.ai
+
+# OS
+.DS_Store

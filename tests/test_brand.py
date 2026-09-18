@@ -1,0 +1,165 @@
+"""Stdlib-only tests. Run from the repo root:
+
+    python3 -m unittest discover -s tests -v
+"""
+
+import csv
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "src"))
+
+import catalog  # noqa: E402
+import risk_check  # noqa: E402
+import shopify_export  # noqa: E402
+from economics import Economics  # noqa: E402
+
+
+class TestCatalog(unittest.TestCase):
+    def setUp(self):
+        self.designs = catalog.load()
+
+    def test_catalog_is_not_empty(self):
+        self.assertGreater(len(self.designs), 20)
+
+    def test_catalog_validates_clean(self):
+        self.assertEqual(catalog.validate(self.designs), [])
+
+    def test_ids_are_unique(self):
+        ids = [d.id for d in self.designs]
+        self.assertEqual(len(ids), len(set(ids)))
+
+    def test_no_tier_a_design_is_high_risk(self):
+        for d in self.designs:
+            if d.tier == "A":
+                self.assertNotEqual(d.risk, "high", f"{d.id} is tier A and high risk")
+
+    def test_high_risk_designs_are_not_printable(self):
+        for d in self.designs:
+            self.assertEqual(d.printable, d.risk != "high")
+
+    def test_validate_catches_a_bad_row(self):
+        bad = catalog.Design(
+            id="X1", slogan="x", theme="t", format="punchline",
+            tier="A", risk="high", risk_note="", saturation="low",
+        )
+        problems = catalog.validate([bad])
+        self.assertTrue(any("tier A cannot carry high legal risk" in p for p in problems))
+        self.assertTrue(any("needs a risk note" in p for p in problems))
+
+
+class TestRiskCheck(unittest.TestCase):
+    def test_flags_a_politician_name(self):
+        flags = risk_check.scan("Vote Pelosi Forever")
+        self.assertTrue(any(f.category == "right-of-publicity" for f in flags))
+
+    def test_flags_a_registered_slogan(self):
+        flags = risk_check.scan("Make America Great Again But Correctly")
+        self.assertTrue(any(f.category == "trademark" for f in flags))
+
+    def test_flags_a_riff_on_a_newspaper_tagline(self):
+        flags = risk_check.scan("Democracy Dies In Dark Mode")
+        self.assertTrue(any(f.category == "trademark" for f in flags))
+
+    def test_clean_slogan_is_clear(self):
+        self.assertEqual(risk_check.scan("Bootstraps Sold Separately"), [])
+
+    def test_worst_severity_sorts_first(self):
+        flags = risk_check.scan("Nike Presents Trump")
+        self.assertEqual(flags[0].severity, "high")
+
+    def test_matching_is_word_bounded(self):
+        # "gop" must not match inside "gospel".
+        self.assertEqual(risk_check.scan("Gospel Brunch"), [])
+
+    def test_every_tier_a_design_passes_the_scanner(self):
+        for d in catalog.load():
+            if d.tier == "A":
+                self.assertEqual(risk_check.scan(d.slogan), [], f"{d.id} tripped a rule")
+
+
+class TestEconomics(unittest.TestCase):
+    def test_defaults_are_profitable(self):
+        self.assertGreater(Economics().gross_profit, 0)
+
+    def test_margin_rises_with_price(self):
+        self.assertLess(Economics(retail=26).margin, Economics(retail=34).margin)
+
+    def test_cogs_is_the_sum_of_its_parts(self):
+        e = Economics(blank_cost=5.0, print_cost=7.0, shipping_cost=6.0)
+        self.assertAlmostEqual(e.cogs, 18.0)
+
+    def test_underwater_price_never_breaks_even(self):
+        e = Economics(retail=10.00)
+        self.assertLess(e.gross_profit, 0)
+        self.assertEqual(e.breakeven_units(100.0), float("inf"))
+
+    def test_breakeven_scales_with_fixed_costs(self):
+        e = Economics()
+        self.assertAlmostEqual(e.breakeven_units(120.0), 2 * e.breakeven_units(60.0))
+
+    def test_report_renders(self):
+        self.assertIn("GROSS MARGIN", Economics().report())
+
+
+class TestShopifyExport(unittest.TestCase):
+    def test_handles_are_url_safe(self):
+        self.assertEqual(
+            shopify_export.handle_for("GERRYMANDER (v.) To Choose Your Own Voters"),
+            "gerrymander-v-to-choose-your-own-voters",
+        )
+
+    def test_handle_strips_apostrophes(self):
+        self.assertEqual(shopify_export.handle_for("I'm With The Banned"), "i-m-with-the-banned")
+
+    def test_size_upcharge_applies_to_2xl_only(self):
+        self.assertEqual(shopify_export.price_for(32.0, "L"), 32.0)
+        self.assertEqual(shopify_export.price_for(32.0, "2XL"), 34.0)
+
+    def test_one_product_yields_one_row_per_variant(self):
+        design = catalog.load()[0]
+        rows = shopify_export.rows_for(design, 32.0, publish=False)
+        self.assertEqual(len(rows), len(shopify_export.COLORS) * len(shopify_export.SIZES))
+
+    def test_only_the_first_row_carries_product_fields(self):
+        design = catalog.load()[0]
+        rows = shopify_export.rows_for(design, 32.0, publish=False)
+        self.assertTrue(rows[0]["Title"])
+        self.assertTrue(all(not r["Title"] for r in rows[1:]))
+
+    def test_all_rows_share_one_handle(self):
+        design = catalog.load()[0]
+        rows = shopify_export.rows_for(design, 32.0, publish=False)
+        self.assertEqual(len({r["Handle"] for r in rows}), 1)
+
+    def test_skus_are_unique_within_a_product(self):
+        design = catalog.load()[0]
+        rows = shopify_export.rows_for(design, 32.0, publish=False)
+        skus = [r["Variant SKU"] for r in rows]
+        self.assertEqual(len(skus), len(set(skus)))
+
+    def test_products_default_to_draft(self):
+        design = catalog.load()[0]
+        rows = shopify_export.rows_for(design, 32.0, publish=False)
+        self.assertEqual(rows[0]["Status"], "draft")
+
+    def test_written_csv_round_trips(self):
+        design = catalog.load()[0]
+        rows = shopify_export.rows_for(design, 32.0, publish=False)
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "out.csv"
+            with path.open("w", newline="", encoding="utf-8") as fh:
+                w = csv.DictWriter(fh, fieldnames=shopify_export.COLUMNS)
+                w.writeheader()
+                w.writerows(rows)
+            with path.open(newline="", encoding="utf-8") as fh:
+                back = list(csv.DictReader(fh))
+        self.assertEqual(len(back), len(rows))
+        self.assertEqual(back[0]["Title"], design.slogan)
+
+
+if __name__ == "__main__":
+    unittest.main()
