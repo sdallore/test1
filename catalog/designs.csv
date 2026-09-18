@@ -1,31 +1,6 @@
 id,slogan,theme,tone,motif,format,tier,risk,risk_note,saturation
-D001,Shovel The Whole Block,neighbors,warm,shovel,punchline,A,low,Original. Civic virtue as one small concrete act.,low
-D002,I'd Water Your Plants,neighbors,warm,wateringcan,punchline,A,low,Original. Neighborliness stated as an offer.,low
-D003,Leave The Porch Light On,welcome,warm,porchlight,punchline,A,low,Original phrasing of a common image. Quiet and layered.,low
-D004,Democracy Is A Group Project,democracy,wry,posterboard,punchline,A,low,Original. The school-project joke lands across the whole audience.,low
-D005,Decency Is A Policy Position,values,wry,seal,punchline,A,low,Original. Clever without being unkind.,low
-D006,I'm With The Banned,books,wry,books,punchline,A,low,Common library-community phrase with no single owner.,medium
-D007,There's Room,inclusion,earnest,chair,punchline,A,low,Original. Two words. Works on a shirt and a tote.,low
-D008,The Librarian Trusted You With It,books,warm,librarycard,punchline,A,low,Original. Trust as the point rather than the ban.,low
-D009,Borrow My Ladder,neighbors,warm,ladder,punchline,A,low,Original. Oblique and specific which is why it works.,low
-D010,Somebody Planted The Tree You're Sitting Under,legacy,earnest,tree,punchline,A,low,Echoes an old proverb with no owner.,low
-D011,Nobody Asks The Fire Department For A Copay,healthcare,wry,hydrant,punchline,A,low,Original. Makes the argument without naming an opponent.,low
-D012,Casserole Democracy,community,warm,casserole,punchline,A,low,Original. Community as something you carry to a door.,low
-D013,The Mail Goes Everywhere,publicgoods,earnest,mailbox,punchline,B,low,Original. Universal service stated as a plain fact.,low
-D014,Feed The Kids. That's The Whole Policy.,education,earnest,tray,punchline,B,low,Original. The period does the work.,low
-D015,Mutual Aid Is Just Neighboring With Extra Steps,community,wry,houses,punchline,B,low,Original. Defuses a loaded term by making it ordinary.,low
-D016,I Brought Snacks To The Polls,democracy,warm,ballotbox,punchline,B,low,Original. Specific and small which is why it works.,low
-D017,Ask Me About My Library Card,books,warm,librarycard,punchline,B,low,Original. Invites a conversation rather than ending one.,low
-D018,Voting Is A Love Language,democracy,warm,ballotbox,punchline,B,low,Riffs a pop-psych phrase that is not protectable.,medium
-D019,The Lunch Lady Knew Everyone's Name,education,warm,tray,punchline,B,low,Original. Nostalgia without borrowing anyone's characters.,low
-D020,Plant Something You Won't See Full Grown,climate,earnest,tree,punchline,B,low,Original. Climate framed as generosity rather than doom.,low
-D021,Everything Good Was Once A Public Good,publicgoods,earnest,chair,punchline,B,low,Original. Quiet and argumentative at once.,low
-D022,Y'all Means All,inclusion,warm,table,punchline,B,low,Widely used phrase with no single owner. Fits the voice exactly.,high
-D023,GERRYMANDER (v.) To Choose Your Own Voters,democracy,wry,district,definition,C,low,Dictionary format with original definition text.,low
-D024,Unionize Your Group Chat,labor,wry,groupchat,punchline,C,low,Original. Very online and genuinely funny.,low
-D025,Public Libraries The Original Free Market,books,wry,books,punchline,C,low,Original. Converts with librarians and teachers.,low
-D026,Hold The Door,values,earnest,door,punchline,C,low,Original. Deliberately ambiguous. Test whether it reads.,low
-D027,Nobody Built It Alone,labor,earnest,ladder,punchline,C,low,Original. Quiet version of a contested argument.,low
-D028,The Table Got Longer,inclusion,warm,table,punchline,C,low,Original phrasing of a circulating image.,low
-D029,Somebody's Kid,empathy,earnest,backpack,punchline,C,low,Original. Two words that reframe almost any argument.,low
-D030,Compost Happens,climate,wry,compost,punchline,C,low,Gentle pun. Low ambition and cheap to test.,medium
+D011,Nobody Asks The Fire Department For A Copay,healthcare,wry,hydrant,punchline,A,low,"Strongest in the catalog. Real argument, lands in two seconds, picks a fight without being mean.",low
+D004,Democracy Is A Group Project,democracy,wry,posterboard,punchline,A,low,Legible to everyone who has ever been in a group project. Funny and political at once.,low
+D005,Decency Is A Policy Position,values,wry,seal,punchline,A,low,"More statement than joke, but sharp and unmistakable.",low
+D006,I'm With The Banned,books,wry,books,punchline,B,low,Good pun with proven demand and thousands of competing listings. Print only if a post lands.,medium
+D024,Unionize Your Group Chat,labor,wry,groupchat,punchline,B,low,"Funny and very online. Narrow audience, so it is a test rather than a bet.",low

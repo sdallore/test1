@@ -59,27 +59,39 @@ manufacture. Worth revisiting once the Shopify store is live.
 
 ## The test-before-you-print loop
 
-The cheapest thing you can do, and most people skip it:
+This is no longer a tip. It is the plan — see `05-launch-plan.md`, Phase 0.
 
-1. Post the joke as plain text or a rough mockup on TikTok or X.
-2. Watch engagement for 48 hours.
-3. Only make artwork for the jokes that got a reaction.
+1. Post the joke as plain text or a rough mockup.
+2. Watch for 48 hours. Repeat at a different hour on a different day.
+3. Print nothing until a design clearly beats your own baseline **and** draws at
+   least one unprompted "where can I buy this".
 
-This inverts the usual order — most sellers make 50 designs and hope. You are
-letting the audience pick, before you spend a minute in a design tool. It also
-builds the audience that will buy the winners.
+Most sellers make fifty designs and hope. You are letting strangers pick,
+before spending a dollar. If nothing clears the gate, you have learned the
+jokes are not there — for the price of two weeks and no money.
 
-## Cadence that fits the season
+**"Where can I buy this" is the only metric that predicts a sale.** One of those
+is worth a hundred likes. Likes are free; typing a purchase question is not.
 
-- **Daily:** one organic short-form post.
-- **Weekly:** one drop. A recurring drop is a reason to open the email.
-- **Reactive:** when news breaks, the joke ships within 48 hours. This is the
-  one thing a small operation can do that a big one cannot, and it is worth
-  more than any other advantage you have.
+## Cadence for a side project
+
+Daily posting is a job. This is not a job.
+
+- **A few posts a week**, whenever you actually have a joke.
+- **Reactive when it's easy:** if news breaks and a joke is obvious, post it
+  that day. Don't manufacture one.
+- **One good new joke a month** beats twenty mediocre ones, because the catalog
+  is deliberately tiny.
+
+The moment this starts feeling like an obligation, it has stopped being worth
+what it pays.
 
 ## Numbers to hold yourself to
 
-At roughly 2% conversion and ~$11 gross profit per shirt, 100 orders needs
-about 5,000 store sessions. That is a realistic organic number over five weeks
-**if** a couple of posts break out — and an unrealistic one if none do. Treat
-the first breakout as the signal to pour effort into whatever produced it.
+At ~$8.94 profit per shirt on Etsy, **20 shirts is about $180.** That is the
+realistic shape of a good first quarter, and it is the entire point — this is
+sized to pay for beer, not to replace income.
+
+Etsy matters here because it brings its own search traffic. A Shopify store
+would need you to manufacture every visitor, which is the thing you have no
+mechanism for.

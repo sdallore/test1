@@ -1,17 +1,17 @@
 # Punny Political T-Shirt Brand
 
-A progressive-leaning apparel brand built on wordplay, sold through Shopify and
-fulfilled by a DTF drop-ship supplier. This repository holds the business plan,
-the design catalog, and the Python tooling that turns the catalog into products.
+A five-design side project: warm, progressive-leaning shirts, DTF drop-ship
+fulfilment, sold on Etsy. **Scope is beer money, not a business** — the plan
+tests jokes as free social posts before anything gets printed.
 
-**Status:** pre-launch. No supplier chosen, no store built.
+**Status:** pre-launch, nothing printed, nothing spent.
 
 ## Start here
 
-1. **[`docs/01-business-plan.md`](docs/01-business-plan.md)** — positioning, name
-   candidates, unit economics, risk register, and an honest read on the ceiling
-2. **[`docs/05-launch-plan.md`](docs/05-launch-plan.md)** — week-by-week to
-   Election Day, and where the plan breaks
+1. **[`docs/05-launch-plan.md`](docs/05-launch-plan.md)** — Phase 0 costs $0 and
+   is the only phase that matters yet
+2. **[`docs/01-business-plan.md`](docs/01-business-plan.md)** — the five designs,
+   why twenty-five were cut, unit economics, honest ceiling
 3. **[`docs/02-legal-guardrails.md`](docs/02-legal-guardrails.md)** — read before
    printing anything
 
@@ -22,17 +22,20 @@ Also: [supplier vetting](docs/03-supplier-vetting.md),
 ## The three things that drive everything
 
 **Paid ads are effectively unavailable.** TikTok bans political advertising
-outright; Meta and Google require election-advertiser authorization and reject
-political merch inconsistently. Growth has to be organic and owned. This is the
-single biggest constraint on the business.
+outright; Meta and Google require election-advertiser authorisation and reject
+political merch inconsistently. Growth has to be organic, which means a shirt
+only travels if people share it.
 
-**AI-generated art has no copyright.** Purely AI-generated images aren't
-protectable under current US guidance, so designs can be copied legally. The
-moat is brand, audience, and speed of the next drop.
+**So the joke is the product.** A shirt nobody screenshots is a shirt nobody
+sees. The catalog was cut from 30 to 5 on one test: *does a stranger get it in
+two seconds?* Pleasant sentiment that isn't a joke — *Shovel The Whole Block*,
+*Borrow My Ladder*, *There's Room* — failed it and went to
+[`catalog/retired.csv`](catalog/retired.csv).
 
-**The joke is the product.** Without ads, a shirt nobody screenshots gets no
-traffic. Thirty good designs beat five hundred mediocre ones, and that ratio is
-why the catalog is small on purpose.
+**Test before printing.** Phase 0 posts the five slogans as plain text and
+prints nothing until one clearly beats your own baseline and draws an
+unprompted "where can I buy this". Failing that gate costs two weeks and no
+money, which is the whole reason it comes first.
 
 ## The voice
 
@@ -85,15 +88,17 @@ python3 -m unittest discover -s tests -v
 
 ## The catalog
 
-[`catalog/designs.csv`](catalog/designs.csv) holds 30 designs, each tagged with
-a theme, a **tone**, a **motif**, a legal risk level, a risk note, and a
-saturation estimate.
+[`catalog/designs.csv`](catalog/designs.csv) holds five designs, tagged with
+theme, **tone**, **motif**, legal risk, a risk note, and saturation.
 
-- **Tier A (12)** — launch set. *Shovel The Whole Block*, *I'd Water Your
-  Plants*, *Leave The Porch Light On*, *Democracy Is A Group Project*,
-  *Decency Is A Policy Position*, *There's Room*.
-- **Tier B (10)** — second drop, once tier A shows which themes sell.
-- **Tier C (8)** — quieter or narrower. Cheap to test, easy to cut.
+- **Tier A** — *Nobody Asks The Fire Department For A Copay*, *Democracy Is A
+  Group Project*, *Decency Is A Policy Position*.
+- **Tier B** — *I'm With The Banned* (proven demand, thousands of competing
+  listings) and *Unionize Your Group Chat* (funny, narrow). Tests, not bets.
+
+Twenty-five retired designs live in
+[`catalog/retired.csv`](catalog/retired.csv). Nothing stops one coming back if
+it earns it as a post.
 
 `tone` is the register: **warm** (offers something), **wry** (argues lightly),
 **earnest** (says it plainly), or **sharp** (a dunk with no idea in it).

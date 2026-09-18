@@ -1,115 +1,103 @@
-# Five-week launch plan
+# The plan: test before you print
 
-**Today: September 18, 2026. Election Day: November 3, 2026.**
+**Scope: a side project that should pay for beer.** Not a business. Every
+decision below follows from that, and from one fact established early — you
+cannot buy traffic for political merch, so a design only travels if people
+share it.
 
-The revenue window is shorter than it looks. With typical DTF drop-ship
-turnaround plus transit, **orders placed after roughly October 25 will not
-arrive before Election Day.** Confirm the real cutoff with your supplier and
-put it on the site — it is both an honest disclosure and the best urgency
-driver you will have.
+## Why this replaces the countdown
 
-That leaves about five selling weeks, and the store needs to be live for most
-of them.
+The previous version of this file was a five-week sprint to Election Day:
+supplier by week 1, store by week 2, live by week 3. That plan assumed the
+designs were good enough to sell. Nobody has tested whether a single one of
+them is.
 
-## Critical path
+It also front-loaded every cost — samples, domain, LLC, a $39/month
+storefront — before a single stranger had reacted to anything. For a project
+whose target is beer money, that is the wrong order.
 
-Everything depends on one thing: **the supplier sample.** You cannot price,
-photograph, or promise turnaround until a shirt is in your hands. Order samples
-in week 1 or the whole timeline slips.
+**So: prove a joke lands before spending a dollar on it.**
 
----
+## Phase 0 — post the jokes. Cost: $0. Two weeks.
 
-## Week 1 — Sept 18–27: supplier and setup
+No store. No supplier. No LLC. No domain. Nothing to buy.
 
-Run these in parallel; none blocks another.
+Take the five slogans and post them as plain text or a rough mockup on
+whatever you already use — Bluesky, Reddit where the rules permit it, TikTok,
+Instagram, a group chat. One a day, repeated across a couple of weeks so each
+gets more than one shot at a different hour.
 
-- [ ] Send the vetting questions from `03-supplier-vetting.md` to 3 suppliers
-- [ ] **Order samples from the top 2** — highest priority item on this list
-- [ ] Pick a brand name; check the USPTO database and domain availability
-- [ ] Register the domain
-- [ ] File the LLC
-- [ ] Start the Shopify trial
-- [ ] Open the social accounts and start posting jokes immediately — audience
-      building starts before product exists
-- [ ] Set up a business bank account and apply for payment processing early;
-      underwriting on political merch takes longer than you expect
+**What you are measuring** is not likes. It is:
 
-## Week 2 — Sept 28–Oct 4: product and store
+1. **"Where can I buy this?"** — the only comment that actually predicts a
+   sale. One of these is worth a hundred likes.
+2. **Shares and reposts.** Someone putting it in front of *their* people is the
+   growth mechanism, so it is the thing to measure.
+3. **Reply volume versus your own baseline.** Compare against your normal post,
+   not against strangers' viral numbers.
 
-- [ ] Samples arrive. Run the wash test in `03-supplier-vetting.md`. Pick one
-      supplier.
-- [ ] Lock real per-unit costs into `src/economics.py` and set final pricing
-- [ ] Produce artwork for the 11 tier A designs per `04-artwork-spec.md`
-- [ ] Run `src/risk_check.py` on every design; resolve every flag
-- [ ] Build the store: theme, size chart tied to your exact blank, shipping
-      policy, returns policy, terms, privacy
-- [ ] `python3 src/shopify_export.py --tiers A --price <final>` and import
-- [ ] Add mockups, configure the supplier app, place a real test order end to
-      end and let it ship to you
+**The gate: nothing gets printed until at least one design clearly beats your
+own baseline and draws at least one unprompted "I'd buy that".** If nothing
+clears it in two weeks, the honest read is that these five are not the ones,
+and the fix is better jokes, not a store.
 
-## Week 3 — Oct 5–11: launch
+That outcome costs you two weeks and no money. That is the entire point of
+running this phase first.
 
-- [ ] Go live. Flip products from draft to active.
-- [ ] Announce across every channel
-- [ ] Email popup on, 10% welcome offer
-- [ ] Seed 20 creators with free shirts
-- [ ] Daily short-form posting
-- [ ] Watch which designs get added to cart; that is your real signal
+## Phase 1 — only for what passed. Cost: ~$75–120.
 
-## Week 4 — Oct 12–18: drop two and double down
+- [ ] Order a sample of the winning design from two suppliers. Ask the content
+      policy question first (`03-supplier-vetting.md`) — it disqualifies
+      fastest.
+- [ ] Wash test both, ten cycles, per the vetting doc.
+- [ ] Put real supplier numbers into `src/economics.py` and set the price.
+- [ ] List on **Etsy**. Not Shopify.
 
-- [ ] Kill the designs with zero add-to-carts; stop promoting them
-- [ ] Ship tier B artwork for the themes that are working
-- [ ] `python3 src/shopify_export.py --tiers B` and import
-- [ ] Email the list about the drop
-- [ ] Reactive design: one shirt responding to a news moment, live inside 48h
-- [ ] Put the **order by Oct 25** deadline on the site
+**Why Etsy and not the storefront I recommended earlier.** At this volume the
+$39/month Shopify plan is a subscription to a shop nobody visits — it only
+overtakes Etsy above roughly 17 shirts a month. Etsy costs nothing monthly and,
+more importantly, it is the only option that brings buyers who are already
+searching for the thing you are selling. Shopify Starter is cheaper per sale
+than Etsy on fees alone, but it brings no traffic, and traffic is what you do
+not have.
 
-## Week 5 — Oct 19–25: the peak
+Revisit this the month you clear ~20 sales. Not before.
 
-This is the highest-volume week of the year for this category. Everything is
-urgency.
+## Phase 2 — only if Phase 1 sells. Cost: your time.
 
-- [ ] Countdown banner on every page
-- [ ] Email on Oct 20, Oct 23, and Oct 25
-- [ ] Abandoned-cart email flow on if it isn't already
-- [ ] Post multiple times a day
-- [ ] Watch supplier turnaround daily; if it slips, move the cutoff *forward*
-      and say so publicly
+- [ ] List the second and third designs.
+- [ ] Keep posting. The catalog is small on purpose; one good new joke a month
+      beats twenty mediocre ones.
+- [ ] If a design sells steadily, *then* consider the domain, the LLC, and the
+      real storefront.
 
-## Oct 26 – Nov 3: after the cutoff
+## What to expect
 
-Shipping deadline passed does not mean stop.
+Honest numbers for a cold start with no audience:
 
-- [ ] Switch messaging to evergreen designs with no deadline
-- [ ] Keep posting; traffic peaks around Election Day itself
-- [ ] Prepare post-election designs for both outcomes, ready to ship Nov 4
-- [ ] Write the retrospective: which jokes sold, which channel delivered, what
-      the real margin was
+| | |
+|---|---|
+| Phase 0 clears the gate | maybe 1 of the 5 designs |
+| First-month orders if it does | **single digits** |
+| Profit per shirt at $32 on Etsy | ~$8.94 |
+| A good first quarter | 20–40 shirts total, $180–360 profit |
 
-## Post-election: the actual question
+That is beer money, which is the stated goal. It is also roughly a tenth of
+what the earlier version of the business plan projected.
 
-Political merch demand falls off sharply after an election. Decide in advance
-which you are building:
+## Retraction
 
-- **A seasonal business** that goes quiet and wakes up for 2028. Low effort,
-  real money in cycles.
-- **A year-round brand** where politics is one theme among several — labor,
-  climate, books, science already generalize past the election. Harder, but
-  it's the version that compounds.
+An earlier draft of `01-business-plan.md` targeted **100–150 orders and
+$3,200–4,800** in the first cycle. That number assumed ~5,000 organic sessions,
+which assumed a breakout post, which assumed screenshot-worthy designs — none
+of it tested. Treat it as wrong. The table above replaces it.
 
-The catalog is deliberately weighted toward the second. Only four of the
-twenty-eight designs are tied to an election at all.
+## The thing that would actually change the outcome
 
-## Where this plan breaks
+Merch businesses that work are almost always downstream of an audience: the
+shirts monetise attention that already exists. You do not have that yet.
 
-Honest failure modes, in order of likelihood:
-
-1. **No supplier will print political content.** Found in week 1 — which is
-   exactly why content policy is the first question you ask.
-2. **Samples are bad and week 2 restarts.** Budget for it by sampling two
-   suppliers at once, not one.
-3. **Payment processing gets held in underwriting.** Apply in week 1.
-4. **Nothing goes viral.** The most likely outcome. It means a slow start, not
-   a dead business — but it means the joke bar wasn't high enough, and the fix
-   is better jokes, not more of them.
+If at some point you want this to be more than beer money, the lever is not a
+better catalog or a better store. It is becoming someone whose jokes people
+already follow. That is a much bigger commitment than a t-shirt brand, and it
+is completely reasonable not to want it. Just don't confuse the two projects.

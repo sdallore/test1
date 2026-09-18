@@ -21,6 +21,7 @@ import prep_art  # noqa: E402
 import typeset  # noqa: E402
 import prompts  # noqa: E402
 import shopify_export  # noqa: E402
+import economics  # noqa: E402
 from economics import Economics  # noqa: E402
 
 
@@ -28,8 +29,17 @@ class TestCatalog(unittest.TestCase):
     def setUp(self):
         self.designs = catalog.load()
 
-    def test_catalog_is_not_empty(self):
-        self.assertGreater(len(self.designs), 20)
+    def test_catalog_is_deliberately_small(self):
+        # Cut to five on purpose. A big catalog with no audience is 30
+        # listings nobody sees.
+        self.assertGreaterEqual(len(self.designs), 3)
+        self.assertLessEqual(len(self.designs), 8)
+
+    def test_retired_designs_are_kept_not_deleted(self):
+        retired = catalog.load(catalog.CATALOG_PATH.parent / "retired.csv")
+        self.assertGreater(len(retired), 10)
+        live = {d.id for d in self.designs}
+        self.assertEqual(live & {d.id for d in retired}, set())
 
     def test_catalog_validates_clean(self):
         self.assertEqual(catalog.validate(self.designs), [])
@@ -140,7 +150,7 @@ class TestRiskCheck(unittest.TestCase):
 
 class TestEconomics(unittest.TestCase):
     def test_defaults_are_profitable(self):
-        self.assertGreater(Economics().gross_profit, 0)
+        self.assertGreater(Economics().contribution, 0)
 
     def test_margin_rises_with_price(self):
         self.assertLess(Economics(retail=26).margin, Economics(retail=34).margin)
@@ -151,15 +161,42 @@ class TestEconomics(unittest.TestCase):
 
     def test_underwater_price_never_breaks_even(self):
         e = Economics(retail=10.00)
-        self.assertLess(e.gross_profit, 0)
-        self.assertEqual(e.breakeven_units(100.0), float("inf"))
-
-    def test_breakeven_scales_with_fixed_costs(self):
-        e = Economics()
-        self.assertAlmostEqual(e.breakeven_units(120.0), 2 * e.breakeven_units(60.0))
+        self.assertLess(e.contribution, 0)
+        self.assertEqual(e.breakeven_units(), float("inf"))
 
     def test_report_renders(self):
-        self.assertIn("GROSS MARGIN", Economics().report())
+        self.assertIn("CONTRIBUTION", Economics().report(8))
+
+    def test_every_platform_is_modelled(self):
+        for key in economics.PLATFORMS:
+            e = Economics(platform=key)
+            self.assertGreater(e.contribution, 0, key)
+
+    def test_etsy_takes_the_biggest_per_sale_cut(self):
+        fees = {k: Economics(platform=k).platform_fee for k in economics.PLATFORMS}
+        self.assertEqual(max(fees, key=fees.get), "etsy")
+
+    def test_shopify_basic_loses_money_at_tiny_volume(self):
+        # A $39/mo plan is a subscription to a shop nobody visits.
+        self.assertLess(Economics(platform="shopify-basic").monthly_profit(2), 0)
+
+    def test_etsy_needs_no_volume_to_break_even(self):
+        self.assertLess(Economics(platform="etsy").breakeven_units(), 1.0)
+
+    def test_shopify_basic_only_wins_at_higher_volume(self):
+        base = Economics()
+        n = economics.crossover(base, "etsy", "shopify-basic")
+        self.assertIsNotNone(n)
+        self.assertGreater(n, 10)
+        below = economics.replace(base, platform="shopify-basic").monthly_profit(n - 5)
+        above = economics.replace(base, platform="shopify-basic").monthly_profit(n + 5)
+        self.assertLess(below, economics.replace(base, platform="etsy").monthly_profit(n - 5))
+        self.assertGreater(above, economics.replace(base, platform="etsy").monthly_profit(n + 5))
+
+    def test_monthly_profit_scales_with_units(self):
+        e = Economics(platform="etsy")
+        self.assertAlmostEqual(
+            e.monthly_profit(20) - e.monthly_profit(10), e.contribution * 10, places=6)
 
 
 class TestShopifyExport(unittest.TestCase):
