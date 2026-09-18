@@ -84,6 +84,44 @@ a machine without the font. Open the SVG in a vector editor and convert text to
 outlines. Pick and licence a real display font while you are there — the files
 currently name a Poppins/Futura stack as a placeholder.
 
+## Typography
+
+A slogan is not one centred paragraph. `src/typeset.py` builds a **lockup**:
+the words carrying the idea set large in a display face, the connectives
+dropped small into a script, each content line scaled to fill the print width.
+
+```
+Democracy Is A Group Project     ->     DEMOCRACY
+                                           is a
+                                     GROUP PROJECT
+```
+
+Three rules make it work, and all three came out of looking at rendered output:
+
+- **Connectives drop to script**, but only between two content runs. A phrase
+  ending "...Porch Light On" must not strand "On" alone on a script line.
+- **At most one script line.** More chops the lockup into confetti.
+- **Long phrases break across lines.** A single long line scales *down* to fit
+  the width and prints small; breaking it lets every line run large. The target
+  is ~11 characters per line for display type.
+
+### The fonts
+
+Vendored in `assets/fonts` with their licences, converted to TTF from
+`@fontsource` packages:
+
+| Role | Face | Licence |
+|---|---|---|
+| `display` | Alfa Slab One | OFL-1.1 |
+| `script` | Yellowtail | Apache-2.0 |
+| `voice` | Fraunces | OFL-1.1 |
+
+OFL and Apache both permit commercial use and embedding. OFL requires the
+licence travel with the font, which is why the LICENSE files sit beside them.
+
+Swapping the palette is a file swap: replace `assets/fonts/display.ttf` and
+every design re-sets in the new face.
+
 ## Upgrading the art
 
 Vendored icons are a floor, not a ceiling. They are clean and consistent, and

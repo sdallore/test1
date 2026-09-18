@@ -1,0 +1,20 @@
+{
+  "display": {
+    "family": "Alfa Slab One",
+    "file": "display.ttf",
+    "license": "OFL-1.1",
+    "package": "@fontsource/alfa-slab-one"
+  },
+  "script": {
+    "family": "Yellowtail",
+    "file": "script.ttf",
+    "license": "Apache-2.0",
+    "package": "@fontsource/yellowtail"
+  },
+  "voice": {
+    "family": "Fraunces",
+    "file": "voice.ttf",
+    "license": "OFL-1.1",
+    "package": "@fontsource/fraunces"
+  }
+}

@@ -149,9 +149,23 @@ generated file and in `docs/04-artwork-spec.md`, which also covers the two
 other routes up (commissioned illustration, public-domain source art) and the
 licensing rule for each.
 
-**One manual step before printing:** the type is `<text>`, so it reflows on a
-machine without the font. Convert text to outlines in a vector editor, and
-licence a real display font while you are there.
+## Typography
+
+`src/typeset.py` builds a **lockup** rather than centred lines: idea words large
+in a display face, connectives dropped small into a script, each content line
+scaled to fill the print width.
+
+```
+Democracy Is A Group Project     ->     DEMOCRACY
+                                           is a
+                                     GROUP PROJECT
+```
+
+Type is set as real `<path>` outlines from fonts vendored in `assets/fonts`
+(Alfa Slab One, Yellowtail, Fraunces — OFL and Apache, embedding permitted).
+**There is no manual "convert to outlines" step**: the SVG renders identically
+on a machine that has never seen the typeface, and a test asserts no design
+contains a `<text>` element.
 
 ## Immediate next steps
 

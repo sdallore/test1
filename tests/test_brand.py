@@ -18,6 +18,7 @@ import catalog  # noqa: E402
 import risk_check  # noqa: E402
 import art  # noqa: E402
 import prep_art  # noqa: E402
+import typeset  # noqa: E402
 import prompts  # noqa: E402
 import shopify_export  # noqa: E402
 from economics import Economics  # noqa: E402
@@ -341,25 +342,9 @@ class TestArt(unittest.TestCase):
         self.assertFalse(art.is_full_colour("tree"))
 
     def test_repeated_motifs_render_twice(self):
-        d = next(x for x in self.designs if x.motif in art.REPEATS)
-        svg = art.render(d, "#141414")
-        self.assertEqual(svg.count('<g transform="translate('), art.REPEATS[d.motif])
-
-    def test_text_wrapping_respects_the_width(self):
-        lines, size = art.lay_out_text("Somebody Planted The Tree You're Sitting Under")
-        self.assertLessEqual(len(lines), 4)
-        self.assertLessEqual(max(len(x) for x in lines) * size * 0.56, 1000)
-
-    def test_short_slogans_get_the_largest_size(self):
-        _, small = art.lay_out_text("Somebody Planted The Tree You're Sitting Under")
-        _, large = art.lay_out_text("There's Room")
-        self.assertGreater(large, small)
-
-    def test_text_block_stays_on_the_canvas(self):
-        for d in self.designs:
-            lines, size = art.lay_out_text(d.slogan)
-            bottom = art.TEXT_TOP + len(lines) * size * 1.22
-            self.assertLess(bottom, art.H, f"{d.id} text runs off the canvas")
+        name = next(iter(art.REPEATS))
+        svg = "".join(art.motif_elements(name, "#141414"))
+        self.assertEqual(svg.count('<g transform="translate('), art.REPEATS[name])
 
     def test_markup_in_a_slogan_is_escaped(self):
         d = catalog.Design(
@@ -492,3 +477,86 @@ class TestPrepArt(unittest.TestCase):
         self.assertLess(out.width, 200)
         # 40px of content plus a 3% margin on each side.
         self.assertGreater(out.width, 40)
+
+
+class TestTypeset(unittest.TestCase):
+    """Lockups and outlined type."""
+
+    def setUp(self):
+        self.designs = catalog.load()
+
+    def test_connectives_drop_to_the_script_line(self):
+        runs = typeset.split_runs("Democracy Is A Group Project")
+        self.assertEqual(runs[0], ("Democracy", False))
+        self.assertEqual(runs[1], ("Is A", True))
+        self.assertFalse(runs[2][1])
+
+    def test_leading_and_trailing_connectives_stay_attached(self):
+        # "...Porch Light On" must not strand "On" on its own script line.
+        runs = typeset.split_runs("Leave The Porch Light On")
+        self.assertNotEqual(runs[-1][1], True)
+        self.assertIn("On", runs[-1][0])
+
+    def test_long_phrases_are_broken_so_they_can_set_large(self):
+        # One long line scales down to fit the width and prints small.
+        runs = typeset.split_runs("Casserole Democracy")
+        self.assertEqual(len(runs), 2)
+
+    def test_script_lines_are_capped(self):
+        for d in self.designs:
+            scripts = [r for r in typeset.split_runs(d.slogan) if r[1]]
+            self.assertLessEqual(len(scripts), typeset.MAX_SCRIPT_LINES, d.id)
+
+    def test_every_word_survives_the_lockup(self):
+        for d in self.designs:
+            got = " ".join(t for t, _ in typeset.split_runs(d.slogan)).split()
+            self.assertEqual(got, d.slogan.split(), f"{d.id} lost or reordered words")
+
+    def test_balance_keeps_line_count_sane(self):
+        lines = typeset.balance(["Somebody", "Planted", "The", "Tree"], 11)
+        self.assertGreaterEqual(len(lines), 1)
+        self.assertLessEqual(len(lines), 4)
+
+    def test_measure_scales_linearly(self):
+        a = typeset.measure("Shovel", "display", 100.0)
+        b = typeset.measure("Shovel", "display", 200.0)
+        self.assertAlmostEqual(b, a * 2, places=3)
+
+    def test_outline_emits_paths_not_text(self):
+        svg = typeset.outline("Shovel", "display", 100.0, 600, 800)
+        self.assertIn("<path", svg)
+        self.assertNotIn("<text", svg)
+
+    def test_rendered_type_is_outlines_not_text(self):
+        # The whole point: no <text>, so nothing reflows on a machine that
+        # lacks the font, and no manual outlining step before printing.
+        svg = art.render(self.designs[0], "#141414")
+        self.assertNotIn("<text", svg)
+        self.assertIn("<path", svg)
+
+    def test_lockup_fits_inside_the_text_band(self):
+        for d in self.designs:
+            lines = typeset.lay_out(d.slogan, art.W - 200, art.TEXT_TOP,
+                                    art.TEXT_BOTTOM)
+            self.assertLessEqual(lines[-1]["baseline"], art.TEXT_BOTTOM, d.id)
+            self.assertGreater(lines[0]["baseline"], art.TEXT_TOP, d.id)
+
+    def test_lockup_never_exceeds_the_print_width(self):
+        for d in self.designs:
+            for ln in typeset.lay_out(d.slogan, art.W - 200, art.TEXT_TOP,
+                                      art.TEXT_BOTTOM):
+                w = typeset.measure(ln["text"], ln["role"], ln["size"])
+                self.assertLessEqual(round(w), art.W - 200, f"{d.id}: {ln['text']}")
+
+    def test_every_design_renders_well_formed_svg_with_outlines(self):
+        for d in self.designs:
+            ET.fromstring(art.render(d, "#141414"))
+
+    def test_fonts_are_vendored_with_licences(self):
+        import json
+        man = json.loads((typeset.FONT_DIR / "MANIFEST.json").read_text())
+        for role in ("display", "script", "voice"):
+            self.assertIn(role, man)
+            self.assertTrue((typeset.FONT_DIR / f"{role}.ttf").exists())
+        licences = list(typeset.FONT_DIR.glob("LICENSE-*"))
+        self.assertGreaterEqual(len(licences), 3)

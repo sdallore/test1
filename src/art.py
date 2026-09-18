@@ -13,8 +13,8 @@ Artwork comes from assets/icons (MIT-licensed, vendored) rather than being
 drawn here. Pass --art-dir to override any motif with your own SVG, which is
 how commissioned or AI-generated art gets into the pipeline.
 
-Output is one-colour, the cheapest thing a supplier can print and the most
-forgiving on a blank of any colour.
+Type is set by typeset.py as real outlines, in fonts vendored under
+assets/fonts, so the output is print-ready with no manual outlining step.
 """
 
 from __future__ import annotations
@@ -27,6 +27,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import typeset  # noqa: E402
 from catalog import Design, load  # noqa: E402
 
 OUT_DIR = Path(__file__).resolve().parent.parent / "build" / "art"
@@ -37,9 +38,8 @@ OUT_DIR = Path(__file__).resolve().parent.parent / "build" / "art"
 W, H = 1200, 1400
 MOTIF_CY = 430       # motif centre, in the upper third
 MOTIF_SIZE = 560     # motif box on the 1200-wide canvas
-TEXT_TOP = 880
+TEXT_TOP = 820
 
-FONT_STACK = "Poppins, Futura, 'Century Gothic', 'Trebuchet MS', sans-serif"
 
 
 # --- motif assets ----------------------------------------------------------
@@ -126,57 +126,13 @@ def available_motifs(art_dir: Path | None = None) -> set[str]:
 
 
 # --- typography ------------------------------------------------------------
+# Lockups and outlining live in typeset.py.
 
-def wrap(text: str, max_chars: int) -> list[str]:
-    lines: list[str] = []
-    current = ""
-    for word in text.split():
-        candidate = f"{current} {word}".strip()
-        if len(candidate) <= max_chars or not current:
-            current = candidate
-        else:
-            lines.append(current)
-            current = word
-    if current:
-        lines.append(current)
-    return lines
-
-
-def lay_out_text(slogan: str) -> tuple[list[str], float]:
-    """Wrap the slogan and pick a font size that fits the print width."""
-    best: tuple[list[str], float] | None = None
-    for max_chars in range(9, 30):
-        lines = wrap(slogan, max_chars)
-        if len(lines) > 4:
-            continue
-        longest = max(len(line) for line in lines)
-        # Geometric sans averages ~0.56em per character.
-        size = min(150.0, 980 / (longest * 0.56))
-        # Keep the block inside the canvas.
-        if TEXT_TOP + len(lines) * size * 1.22 > H - 60:
-            continue
-        if best is None or size > best[1]:
-            best = (lines, size)
-    if best is None:
-        lines = wrap(slogan, 22)
-        return lines, 70.0
-    return best
+TEXT_BOTTOM = H - 70
 
 
 def text_elements(slogan: str, ink: str) -> list[str]:
-    lines, size = lay_out_text(slogan)
-    leading = size * 1.22
-    block = len(lines) * leading
-    start = TEXT_TOP + (H - 80 - TEXT_TOP - block) / 2 + size * 0.82
-    out = [
-        f'<g font-family="{FONT_STACK}" font-size="{size:.0f}" font-weight="700" '
-        f'fill="{ink}" stroke="none" text-anchor="middle" letter-spacing="1">'
-    ]
-    for i, text in enumerate(lines):
-        y = start + i * leading
-        out.append(f'<text x="{W/2:.0f}" y="{y:.0f}">{html.escape(text)}</text>')
-    out.append("</g>")
-    return out
+    return typeset.render(slogan, W - 200, W / 2, TEXT_TOP, TEXT_BOTTOM, ink)
 
 
 # --- rendering -------------------------------------------------------------
@@ -252,7 +208,7 @@ def contact_sheet(designs: list[Design], ink: str, art_dir: Path | None = None) 
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {sheet_w} {sheet_h}" '
         f'width="{sheet_w}" height="{sheet_h}">',
         f'<rect width="{sheet_w}" height="{sheet_h}" fill="#f7f4ee"/>',
-        f'<text x="40" y="64" font-family="{FONT_STACK}" font-size="38" '
+        f'<text x="40" y="64" font-family="system-ui, sans-serif" font-size="38" '
         f'font-weight="700" fill="{ink}">Design catalog &#8212; {len(designs)} shirts</text>',
     ]
     scale = (cell_w - 50) / W
@@ -267,7 +223,7 @@ def contact_sheet(designs: list[Design], ink: str, art_dir: Path | None = None) 
         parts.extend(artwork_elements(d, ink, art_dir))
         parts.append("</g>")
         parts.append(
-            f'<text x="{cx + 14}" y="{cy + cell_h - 44}" font-family="{FONT_STACK}" '
+            f'<text x="{cx + 14}" y="{cy + cell_h - 44}" font-family="system-ui, sans-serif" '
             f'font-size="17" fill="#8a8073">{d.id} &#183; tier {d.tier} '
             f'&#183; {d.tone}</text>'
         )
@@ -313,9 +269,8 @@ def main() -> None:
 
     if args.art_dir:
         print(f"art overrides from {args.art_dir}")
-    print("\nOne-colour artwork, the cheapest thing a supplier can print.")
-    print("Before sending to a printer: convert the <text> to outlines in a")
-    print("vector editor, or the type will reflow on a machine without the font.")
+    print("\nType is set as outlines, so these are print-ready as they stand.")
+    print("Fonts are vendored in assets/fonts (OFL / Apache, embedding allowed).")
 
 
 if __name__ == "__main__":
