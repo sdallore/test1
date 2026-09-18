@@ -36,23 +36,24 @@ why the catalog is small on purpose.
 
 ## The voice
 
-Warm, not snarky. The category default is the dig — the dunk, the eye-roll, the
-approval-rating joke. It sells only to people who already agree, and in a
-category with no paid advertising that costs real reach, because the person who
-shares your shirt has to be willing to be seen in it at work.
+Barbed, and the barb is an idea. The shirt cuts by knowing something.
+*MERITOCRACY (n.) Originally A Satire* is an attack and a true fact at once —
+Michael Young coined the word in 1958 to mock the concept. The cut and the
+citation are the same sentence.
 
-So the designs state a value warmly and let it disarm. *Shovel The Whole Block*
-is a political position. *Nobody Asks The Fire Department For A Copay* makes a
-universal-healthcare argument a skeptic can finish reading. Neither names an
-enemy.
+The category default is the dunk: the eye-roll, the approval-rating joke, the
+insult with no content. It sells only to people who already agree and gives a
+critic nothing to engage with. A barbed design invites the argument and wins it.
 
-Two rules hold the voice in place, and both are enforced in code:
+Three rules hold the voice in place, all enforced in code:
 
-- **No politician names or faces.** Puns land on ideas — the filibuster,
-  gerrymandering, banned books, school lunch.
-- **No children's-media IP.** The warm register pulls toward red cardigans and
-  happy little trees. Those are owned, and warmth is not a defense. Take the
-  feeling, never the catchphrase or the costume.
+- **No politician names or faces**, and no living thinkers by name either.
+  *r > g* says what *Piketty Was Right* says, to exactly the right people, with
+  no exposure.
+- **No children's-media IP.** Red cardigans and happy little trees are owned,
+  and warmth is not a defense.
+- **A dunk with no idea in it never leads a launch.** It can live in the
+  catalog; `src/catalog.py` refuses to let it sit in tier A.
 
 ## Tooling
 
@@ -80,23 +81,31 @@ python3 -m unittest discover -s tests -v
 
 ## The catalog
 
-[`catalog/designs.csv`](catalog/designs.csv) holds 36 designs, each tagged with
-a theme, a **tone**, a legal risk level, a risk note, and a saturation estimate.
+[`catalog/designs.csv`](catalog/designs.csv) holds 42 designs, each tagged with
+a theme, a **tone**, a **literacy** level, a legal risk level, a risk note, and
+a saturation estimate.
 
-- **Tier A (12)** — launch set. *Shovel The Whole Block*, *I'd Water Your
-  Plants*, *Somebody Planted The Tree You're Sitting Under*, *Nobody Asks The
-  Fire Department For A Copay*, *Democracy Is A Group Project*, *There's Room*.
-- **Tier B (14)** — second drop, once tier A shows which themes sell.
-- **Tier C (10)** — quieter or narrower. Cheap to test, easy to cut.
+- **Tier A (14)** — launch set. *MERITOCRACY (n.) Originally A Satire*,
+  *AUSTERITY (n.) A Choice Described As A Weather Event*, *LAFFER CURVE (n.) A
+  Napkin*, *Cui Bono?*, *It's Easier For A Camel*, *The Luddites Were
+  Organizers*, *r > g*.
+- **Tier B (15)** — second drop, once tier A shows which themes sell.
+- **Tier C (13)** — deepest cuts and the warm counterweights. Cheap to test.
 
-The `tone` column tracks the register: **warm** (offers something — *I'd Water
-Your Plants*), **wry** (argues lightly — *Democracy Is A Group Project*), or
-**earnest** (says it plainly — *There's Room*). A fourth value, **sharp**,
-exists so a dig can be recorded, but `src/catalog.py` refuses to let a sharp
-design sit in tier A. Digs never lead a launch.
+The `tone` column tracks the register — **barbed**, **wry**, **earnest**,
+**warm**, or **sharp**. The `literacy` column tracks what you need to know to
+get the joke: `general`, `econ`, `history`, `classics`, `scripture`, `theory`,
+`stats`, `rhetoric`.
 
-Every design in the catalog currently scans as low legal risk. That is a
-direct result of the voice: warm designs don't reference people or marks.
+That second column exists because reach and in-group density pull against each
+other. A shirt nobody can explain at a barbecue doesn't get explained at a
+barbecue, and with no paid advertising, being explained is the whole
+distribution mechanism. So `src/catalog.py` enforces a floor: **at least three
+`general`-literacy designs in tier A**, or validation fails. The deep cuts
+reward the people who get them; the legible ones are what carry them there.
+
+Every design currently scans as low legal risk — a direct result of the voice.
+Puns on ideas don't reference people or marks.
 
 Adding a design: append a row to the CSV, run `python3 src/catalog.py` to
 validate it and `python3 src/risk_check.py "<slogan>"` to scan it. The scanner

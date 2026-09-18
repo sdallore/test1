@@ -18,9 +18,24 @@ VALID_TIERS = {"A", "B", "C"}
 VALID_RISK = {"low", "medium", "high"}
 VALID_FORMATS = {"punchline", "definition", "tour-back", "graphic"}
 
-# The brand voice. "sharp" is a dig at an opponent; it is allowed in the
-# catalog so an idea can be recorded, but it never leads a launch.
-VALID_TONES = {"warm", "wry", "earnest", "sharp"}
+# The brand voice.
+#   barbed  - cutting, but the cut is an idea. Carries the brand.
+#   wry     - argues with a light touch.
+#   earnest - says it plainly, no joke.
+#   warm    - offers something.
+#   sharp   - a dunk with no idea in it. Recorded, never launched.
+VALID_TONES = {"warm", "wry", "earnest", "barbed", "sharp"}
+
+# What you need to know to get the joke. "general" designs carry reach;
+# everything else rewards the in-group but travels less far.
+VALID_LITERACY = {
+    "general", "econ", "history", "classics", "scripture", "theory",
+    "stats", "rhetoric",
+}
+
+# A launch set made entirely of deep cuts cannot be shared by the people who
+# would buy it. Without paid advertising, reach is the whole growth model.
+MIN_GENERAL_IN_TIER_A = 3
 
 
 @dataclass(frozen=True)
@@ -29,6 +44,7 @@ class Design:
     slogan: str
     theme: str
     tone: str
+    literacy: str
     format: str
     tier: str
     risk: str
@@ -70,14 +86,24 @@ def validate(designs: list[Design]) -> list[str]:
             problems.append(f"{d.id}: format {d.format!r} not in {sorted(VALID_FORMATS)}")
         if d.tone not in VALID_TONES:
             problems.append(f"{d.id}: tone {d.tone!r} not in {sorted(VALID_TONES)}")
+        if d.literacy not in VALID_LITERACY:
+            problems.append(f"{d.id}: literacy {d.literacy!r} not in {sorted(VALID_LITERACY)}")
         if d.tier == "A" and d.tone == "sharp":
-            problems.append(f"{d.id}: tier A leads with warmth, not a dig")
+            problems.append(f"{d.id}: a dunk with no idea in it cannot lead a launch")
         if not d.risk_note.strip():
             problems.append(f"{d.id}: every design needs a risk note")
         if d.tier == "A" and d.risk == "high":
             problems.append(f"{d.id}: tier A cannot carry high legal risk")
         if len(d.slogan) > 60:
             problems.append(f"{d.id}: slogan is {len(d.slogan)} chars; long text prints badly")
+
+    tier_a_general = sum(1 for d in designs if d.tier == "A" and d.literacy == "general")
+    tier_a = sum(1 for d in designs if d.tier == "A")
+    if tier_a and tier_a_general < MIN_GENERAL_IN_TIER_A:
+        problems.append(
+            f"tier A has {tier_a_general} general-literacy design(s); "
+            f"needs {MIN_GENERAL_IN_TIER_A} so the launch set can travel"
+        )
 
     return problems
 
@@ -100,15 +126,20 @@ def main() -> None:
 
     print("\nBy tier:      ", dict(sorted(Counter(d.tier for d in designs).items())))
     print("By tone:      ", dict(sorted(Counter(d.tone for d in designs).items())))
+    print("By literacy:  ", dict(sorted(Counter(d.literacy for d in designs).items())))
     print("By risk:      ", dict(sorted(Counter(d.risk for d in designs).items())))
     print("By theme:     ", dict(sorted(Counter(d.theme for d in designs).items())))
     print(f"Printable now: {sum(d.printable for d in designs)}/{len(designs)}")
 
     shown = [d for d in designs if not args.tier or d.tier == args.tier]
-    print(f"\n{'ID':<6}{'TIER':<6}{'TONE':<9}{'THEME':<14}SLOGAN")
-    print("-" * 80)
+    reach = [d for d in designs if d.tier == "A" and d.literacy == "general"]
+    print(f"Tier A reach:  {len(reach)} of {sum(1 for d in designs if d.tier == 'A')} "
+          f"land without prior reading")
+
+    print(f"\n{'ID':<6}{'TIER':<6}{'TONE':<9}{'LITERACY':<11}SLOGAN")
+    print("-" * 82)
     for d in shown:
-        print(f"{d.id:<6}{d.tier:<6}{d.tone:<9}{d.theme:<14}{d.slogan}")
+        print(f"{d.id:<6}{d.tier:<6}{d.tone:<9}{d.literacy:<11}{d.slogan}")
 
 
 if __name__ == "__main__":

@@ -1,37 +1,43 @@
-id,slogan,theme,tone,format,tier,risk,risk_note,saturation
-D001,Shovel The Whole Block,neighbors,warm,punchline,A,low,Original. Civic virtue as a small concrete act.,low
-D002,I'd Water Your Plants,neighbors,warm,punchline,A,low,Original. Neighborliness stated as an offer rather than a position.,low
-D003,Somebody Planted The Tree You're Sitting Under,legacy,earnest,punchline,A,low,Echoes an old proverb with no owner. Original phrasing.,low
-D004,Nobody Asks The Fire Department For A Copay,healthcare,wry,punchline,A,low,Original. Makes the argument without naming an opponent.,low
-D005,Democracy Is A Group Project,democracy,wry,punchline,A,low,Original. The school-project joke lands across the whole audience.,low
-D006,Mutual Aid Is Just Neighboring With Extra Steps,community,wry,punchline,A,low,Original. Defuses a loaded term by making it ordinary.,low
-D007,There's Room,inclusion,earnest,punchline,A,low,Original. Two words. Works on a shirt and on a tote.,low
-D008,Leave The Porch Light On,welcome,warm,punchline,A,low,Original phrasing of a common image. Layered and quiet.,low
-D009,Feed The Kids. That's The Whole Policy.,education,earnest,punchline,A,low,Original. School lunch as a position nobody has to argue with.,low
-D010,The Librarian Trusted You With It,books,warm,punchline,A,low,Original. Trust as the point rather than the ban.,low
-D011,Decency Is A Policy Position,values,wry,punchline,A,low,Original. Sharp without being unkind.,low
-D012,I'm With The Banned,books,wry,punchline,A,low,Common library-community phrase with no single owner.,medium
-D013,Borrow My Ladder,neighbors,warm,punchline,B,low,Original. Oblique and specific. Pairs with a simple line drawing.,low
-D014,Casserole Democracy,community,warm,punchline,B,low,Original. Community as something you carry to someone's door.,low
-D015,The Mail Goes Everywhere,publicgoods,earnest,punchline,B,low,Original. Universal service stated as a plain fact.,low
-D016,Everything Good Was Once A Public Good,publicgoods,earnest,punchline,B,low,Original. Quiet and argumentative at the same time.,low
-D017,Ask Me About My Library Card,books,warm,punchline,B,low,Original. Invites a conversation rather than ending one.,low
-D018,Voting Is A Love Language,democracy,warm,punchline,B,low,Original. Riffs a pop-psych phrase that is not protectable.,medium
-D019,I Brought Snacks To The Polls,democracy,warm,punchline,B,low,Original. Specific and small which is why it works.,low
-D020,Somebody's Kid,empathy,earnest,punchline,B,low,Original. Two words that reframe almost any argument.,low
-D021,The Lunch Lady Knew Everyone's Name,education,warm,punchline,B,low,Original. Nostalgia without borrowing anyone's characters.,low
-D022,Plant Something You Won't See Full Grown,climate,earnest,punchline,B,low,Original. Climate framed as generosity rather than doom.,low
-D023,GERRYMANDER (v.) To Choose Your Own Voters,democracy,wry,definition,B,low,Dictionary format. Original definition text. Educational and shareable.,low
-D024,Unionize Your Group Chat,labor,wry,punchline,B,low,Original. Very online and genuinely funny.,low
-D025,Y'all Means All,inclusion,warm,punchline,B,low,Widely used phrase with no single owner. Fits the voice exactly.,high
-D026,Public Libraries The Original Free Market,books,wry,punchline,B,low,Original. Converts with librarians and teachers.,low
-D027,The Table Got Longer,inclusion,warm,punchline,C,low,Original phrasing of a circulating image. Warm and quiet.,low
-D028,Hold The Door,values,earnest,punchline,C,low,Original. Deliberately ambiguous. Test whether it reads.,low
-D029,Nobody Built It Alone,labor,earnest,punchline,C,low,Original. Quiet version of a contested argument.,low
-D030,"Radical Kindness, Moderate Bedtime",values,warm,punchline,C,low,Original. Self-deprecating and very wearable.,low
-D031,Compost Happens,climate,wry,punchline,C,low,Gentle pun. Low risk and low ambition. Cheap to test.,medium
-D032,FILIBUSTER (n.) A Nap Performed Loudly,democracy,wry,definition,C,low,Dictionary format. Original definition text.,low
-D033,Statistically Significant Dissent,science,wry,punchline,C,low,Original. Narrow audience but they will love it.,low
-D034,They Is Singular And Always Has Been,inclusion,wry,punchline,C,low,Grammar-nerd ally shirt. Original phrasing.,low
-D035,In Peer Review We Trust,science,wry,punchline,C,low,Riffs a currency motto which is not protectable.,low
-D036,Electoral College Dropout,democracy,wry,punchline,C,low,Riffs an album title as a generic phrase. Weak TM ground.,low
+id,slogan,theme,tone,literacy,format,tier,risk,risk_note,saturation
+D001,"MERITOCRACY (n.) Originally A Satire",economy,barbed,history,definition,A,low,Michael Young coined it in 1958 as satire. The fact is the joke and it is checkable.,low
+D002,"BOOTSTRAPS (n.) A Physical Impossibility",economy,barbed,history,definition,A,low,The phrase originally described an absurd task. Original definition text.,low
+D003,"ENTITLEMENT (n.) A Thing You Already Paid For",economy,barbed,general,definition,A,low,Original definition text. Legible without any prior reading.,low
+D004,"AUSTERITY (n.) A Choice Described As A Weather Event",economy,barbed,econ,definition,A,low,Original. The best line in the catalog for people who read the business page.,low
+D005,"LAFFER CURVE (n.) A Napkin",economy,barbed,econ,definition,A,low,It was drafted on a restaurant napkin in 1974. Historical fact not opinion.,low
+D006,Cui Bono?,power,barbed,classics,punchline,A,low,Ancient Latin. Public domain. Two words and the whole analytical method.,low
+D007,It's Easier For A Camel,wealth,barbed,scripture,punchline,A,low,Matthew 19:24. KJV is public domain. The in-group finishes the sentence.,low
+D008,Read The Second Half Of Adam Smith,economy,barbed,econ,punchline,A,low,Smith on landlords and masters. Long dead and public domain.,low
+D009,Democracy Is A Group Project,democracy,wry,general,punchline,A,low,Original. The school-project joke lands across the whole audience.,low
+D010,Decency Is A Policy Position,values,wry,general,punchline,A,low,Original. Cutting without being unkind.,low
+D011,I'm With The Banned,books,wry,general,punchline,A,low,Common library-community phrase with no single owner.,medium
+D012,The Luddites Were Organizers,labor,barbed,history,punchline,A,low,Historically accurate correction. They were a labor movement not technophobes.,low
+D013,Survivorship Bias Has A Body Count,stats,barbed,stats,punchline,A,low,Original. Wald's bombers. Reads as clever even if the reference is missed.,low
+D014,r > g,economy,barbed,econ,punchline,A,low,A mathematical inequality is not protectable. Maximum in-group density.,low
+D015,Res Publica Means The Public Thing,democracy,barbed,classics,punchline,B,low,Etymology of republic. Latin and public domain.,low
+D016,Ask Me About The Enclosure Acts,land,barbed,history,punchline,B,low,Invites the conversation rather than ending it. Deep history low risk.,low
+D017,Popper Settled This In 1945,tolerance,barbed,theory,punchline,B,low,The Open Society and Its Enemies. Naming a dead philosopher in a sentence.,low
+D018,Ostrom Disproved That In 1990,commons,barbed,theory,punchline,B,low,Governing the Commons. Factual statement about published work.,low
+D019,Quis Custodiet Ipsos Custodes,accountability,barbed,classics,punchline,B,low,Juvenal. Public domain. Police accountability without the word police.,low
+D020,The Beatitudes Were Not Suggestions,values,barbed,scripture,punchline,B,low,KJV public domain. Cuts at Christian nationalism using its own text.,low
+D021,Matthew 25 Is In There Too,values,barbed,scripture,punchline,B,low,The least of these. Public domain and pointed.,low
+D022,The Jungle Was Not A Cookbook,labor,barbed,history,punchline,B,low,Sinclair 1906 and public domain. Sinclair said much the same himself.,low
+D023,Homo Economicus Is A Fictional Character,economy,barbed,econ,punchline,B,low,Original. Standard critique stated plainly.,low
+D024,"DEREGULATION (n.) Rule By Whoever Is Largest",economy,barbed,general,definition,B,low,Original definition text.,low
+D025,That's A Trend Line Not A Slippery Slope,rhetoric,barbed,stats,punchline,B,low,Original. Good for the data-literate segment.,low
+D026,E Pluribus Unum Came First,democracy,barbed,history,punchline,B,low,It was the de facto motto until 1956. Verifiable historical fact.,low
+D027,Nobody Asks The Fire Department For A Copay,healthcare,wry,general,punchline,B,low,Original. Makes the argument without naming an opponent.,low
+D028,"GERRYMANDER (v.) To Choose Your Own Voters",democracy,wry,general,definition,B,low,Dictionary format with original definition text.,low
+D029,Public Libraries The Original Free Market,books,wry,general,punchline,B,low,Original. Converts with librarians and teachers.,low
+D030,Pessimism Of The Intellect Optimism Of The Will,theory,barbed,theory,punchline,C,low,Gramsci by way of Rolland. Public domain. The deepest cut that still fits a shirt.,low
+D031,Jubilee Was In The Contract,debt,barbed,scripture,punchline,C,low,Leviticus 25 debt forgiveness. Public domain and very obscure.,low
+D032,The Culture Industry Has Notes,media,barbed,theory,punchline,C,low,Adorno and Horkheimer. Title phrase not protectable. Narrow audience.,low
+D033,Would You Choose This From Behind The Veil,justice,barbed,theory,punchline,C,low,Rawls original position. Original phrasing.,low
+D034,All That Is Solid Melts Into Air,theory,barbed,theory,punchline,C,low,Marx 1848 and public domain. Reads as poetry to anyone who misses it.,low
+D035,"FILIBUSTER (n.) A Nap Performed Loudly",democracy,wry,general,definition,C,low,Dictionary format with original definition text.,low
+D036,I Reject Your Null Hypothesis,stats,wry,stats,punchline,C,low,Original. Narrow but they will love it.,low
+D037,Statistically Significant Dissent,stats,wry,stats,punchline,C,low,Original. Same audience as D036 so do not print both first.,low
+D038,In Peer Review We Trust,science,wry,general,punchline,C,low,Riffs a currency motto which is not protectable.,low
+D039,Unionize Your Group Chat,labor,wry,general,punchline,C,low,Original. Very online and genuinely funny.,low
+D040,Somebody Planted The Tree You're Sitting Under,legacy,earnest,general,punchline,C,low,Echoes an old proverb with no owner. Kept as the warm counterweight.,low
+D041,The Librarian Trusted You With It,books,warm,general,punchline,C,low,Original. Kept as the warm counterweight.,low
+D042,There's Room,inclusion,earnest,general,punchline,C,low,Original. Two words. Kept as the warm counterweight.,low

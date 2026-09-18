@@ -43,7 +43,8 @@ class TestCatalog(unittest.TestCase):
 
     def test_validate_catches_a_bad_row(self):
         bad = catalog.Design(
-            id="X1", slogan="x", theme="t", tone="sharp", format="punchline",
+            id="X1", slogan="x", theme="t", tone="sharp", literacy="general",
+            format="punchline",
             tier="A", risk="high", risk_note="", saturation="low",
         )
         problems = catalog.validate([bad])
@@ -52,11 +53,43 @@ class TestCatalog(unittest.TestCase):
 
     def test_tier_a_rejects_a_sharp_tone(self):
         sharp = catalog.Design(
-            id="X2", slogan="x", theme="t", tone="sharp", format="punchline",
+            id="X2", slogan="x", theme="t", tone="sharp", literacy="general",
+            format="punchline",
             tier="A", risk="low", risk_note="fine", saturation="low",
         )
         problems = catalog.validate([sharp])
-        self.assertTrue(any("leads with warmth" in p for p in problems))
+        self.assertTrue(any("cannot lead a launch" in p for p in problems))
+
+    def test_tier_a_accepts_a_barbed_tone(self):
+        # Cutting is fine when the cut is an idea; only empty dunks are barred.
+        barbed = catalog.Design(
+            id="X3", slogan="x", theme="t", tone="barbed", literacy="general",
+            format="punchline", tier="A", risk="low", risk_note="fine",
+            saturation="low",
+        )
+        self.assertNotIn(
+            "cannot lead a launch", " ".join(catalog.validate([barbed]))
+        )
+
+    def test_every_design_has_a_valid_literacy(self):
+        for d in self.designs:
+            self.assertIn(d.literacy, catalog.VALID_LITERACY, f"{d.id}: {d.literacy!r}")
+
+    def test_launch_set_keeps_enough_reach(self):
+        general = [d for d in self.designs if d.tier == "A" and d.literacy == "general"]
+        self.assertGreaterEqual(len(general), catalog.MIN_GENERAL_IN_TIER_A)
+
+    def test_validate_catches_an_all_deep_cut_launch_set(self):
+        obscure = [
+            catalog.Design(
+                id=f"X{i}", slogan="x", theme="t", tone="barbed", literacy="theory",
+                format="punchline", tier="A", risk="low", risk_note="fine",
+                saturation="low",
+            )
+            for i in range(5)
+        ]
+        problems = catalog.validate(obscure)
+        self.assertTrue(any("can travel" in p for p in problems))
 
     def test_every_design_has_a_valid_tone(self):
         for d in self.designs:
@@ -88,6 +121,16 @@ class TestRiskCheck(unittest.TestCase):
         flags = risk_check.scan("Won't You Be My Neighbor")
         self.assertTrue(any(f.category == "nostalgia-ip" for f in flags))
         self.assertEqual(flags[0].severity, "high")
+
+    def test_flags_a_living_theorist(self):
+        flags = risk_check.scan("Piketty Was Right")
+        self.assertTrue(any(f.category == "right-of-publicity" for f in flags))
+
+    def test_long_dead_writers_are_clear(self):
+        # The line the high-brow register walks: the idea is free, the living
+        # person's name is not.
+        self.assertEqual(risk_check.scan("Read The Second Half Of Adam Smith"), [])
+        self.assertEqual(risk_check.scan("r > g"), [])
 
     def test_flags_a_childrens_media_character(self):
         self.assertTrue(
@@ -161,6 +204,23 @@ class TestShopifyExport(unittest.TestCase):
     def test_every_theme_has_product_copy(self):
         for d in catalog.load():
             self.assertIn(d.theme, shopify_export.BLURBS, f"{d.theme} has no blurb")
+
+    def test_literacy_is_carried_into_tags(self):
+        design = next(d for d in catalog.load() if d.tier == "A")
+        rows = shopify_export.rows_for(design, 32.0, publish=False)
+        self.assertIn(design.literacy, rows[0]["Tags"])
+
+    def test_markup_characters_are_escaped_in_the_body(self):
+        # "r > g" would otherwise open a stray tag in the product description.
+        design = next(d for d in catalog.load() if ">" in d.slogan)
+        rows = shopify_export.rows_for(design, 32.0, publish=False)
+        body = rows[0]["Body (HTML)"]
+        self.assertIn("&gt;", body)
+        self.assertNotIn("r > g</strong>", body)
+
+    def test_handle_survives_markup_characters(self):
+        self.assertEqual(shopify_export.handle_for("r > g"), "r-g")
+        self.assertEqual(shopify_export.handle_for("Cui Bono?"), "cui-bono")
 
     def test_size_upcharge_applies_to_2xl_only(self):
         self.assertEqual(shopify_export.price_for(32.0, "L"), 32.0)

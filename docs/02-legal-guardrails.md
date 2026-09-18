@@ -27,6 +27,17 @@ figure and weakest when the figure's identity is the product being sold.
 **Rule: no politician names, no caricatures, no recognizable faces.** Not on
 shirts, not in mockups, not in ad creative.
 
+**The same rule covers living thinkers**, and the erudite register walks into
+this one constantly. Naming the writer is the obvious move and it is the wrong
+one. Long-dead authors are free — Adam Smith, Juvenal, Marx, Gramsci are all
+public domain, and a factual sentence about a dead philosopher's published
+argument is safe. Living ones are not, and a recently dead one may have an
+estate that enforces.
+
+The fix is almost always better design anyway: *r > g* says what *Piketty Was
+Right* says, says it to exactly the people who should hear it, and carries no
+exposure at all. The scanner flags the second and clears the first.
+
 ### 2. Trademark — high risk
 
 Campaign slogans are registered marks. So are party names and newspaper

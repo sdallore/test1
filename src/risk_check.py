@@ -29,6 +29,11 @@ PUBLICITY_TERMS = [
     "trump", "biden", "harris", "obama", "clinton", "sanders", "aoc",
     "ocasio", "pelosi", "mcconnell", "desantis", "newsom", "vance",
     "musk", "bezos", "zuckerberg",
+    # The high-brow register tempts you to name a theorist. Long-dead writers
+    # are public domain; living ones are a right-of-publicity problem, and a
+    # recently dead one may still have an estate that enforces.
+    "piketty", "chomsky", "zizek", "judith butler", "naomi klein",
+    "david graeber", "mark fisher", "ta-nehisi coates",
 ]
 
 # Slogans and names with live trademark registrations or strong common-law
@@ -48,6 +53,9 @@ BRAND_TERMS = [
     "rage against the machine", "wage against the machine", "nike", "adidas",
     "disney", "marvel", "star wars", "pokemon", "coca cola", "pepsi",
     "dewey decimal", "barbie", "taylor swift", "beyonce",
+    # A live trademark with a documented history of enforcing it against
+    # exactly this kind of historical reference.
+    "pinkerton", "pinkertons",
 ]
 
 # Phrases owned or heavily policed by advocacy organizations. Often fine to
