@@ -22,6 +22,9 @@ whose target is beer money, that is the wrong order.
 
 No store. No supplier. No LLC. No domain. Nothing to buy.
 
+Week one is written out post by post in
+[week one — seven posts](07-week-one-posts.md).
+
 Take the five slogans and post them as plain text or a rough mockup on
 whatever you already use — Bluesky, Reddit where the rules permit it, TikTok,
 Instagram, a group chat. One a day, repeated across a couple of weeks so each

@@ -12,7 +12,9 @@ tests jokes as free social posts before anything gets printed.
    is the only phase that matters yet
 2. **[`docs/01-business-plan.md`](docs/01-business-plan.md)** — the five designs,
    why twenty-five were cut, unit economics, honest ceiling
-3. **[`docs/02-legal-guardrails.md`](docs/02-legal-guardrails.md)** — read before
+3. **[`docs/07-week-one-posts.md`](docs/07-week-one-posts.md)** — the seven
+   posts that are Phase 0, written out
+4. **[`docs/02-legal-guardrails.md`](docs/02-legal-guardrails.md)** — read before
    printing anything
 
 Also: [supplier vetting](docs/03-supplier-vetting.md),
