@@ -28,7 +28,7 @@ SIZES = ["S", "M", "L", "XL", "2XL"]
 COLORS = ["Black", "White"]
 SIZE_UPCHARGE = {"2XL": 2.00, "3XL": 4.00}
 
-VENDOR = "Kind Regards"
+VENDOR = "Department of Decency"
 PRODUCT_TYPE = "T-Shirt"
 GRAMS = 170
 
@@ -51,8 +51,7 @@ BODY_TEMPLATE = """<p><strong>{slogan}</strong></p>
   <li>DTF print &mdash; soft hand, cracks less than plastisol</li>
   <li>Printed and shipped within 3&ndash;5 business days</li>
   <li>Machine wash cold, inside out, tumble dry low</li>
-</ul>
-<p><em>Order by October 25 to have it before Election Day.</em></p>"""
+</ul>"""
 
 BLURBS = {
     "neighbors": "Neighborliness is a small, boring, repeated act. This is one of them.",

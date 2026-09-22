@@ -1,4 +1,4 @@
-# Punny Political T-Shirt Brand
+# Department of Decency
 
 A five-design side project: warm, progressive-leaning shirts, DTF drop-ship
 fulfilment, sold on Etsy. **Scope is beer money, not a business** — the plan

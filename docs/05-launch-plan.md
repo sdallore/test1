@@ -27,6 +27,13 @@ whatever you already use — Bluesky, Reddit where the rules permit it, TikTok,
 Instagram, a group chat. One a day, repeated across a couple of weeks so each
 gets more than one shot at a different hour.
 
+`@deptofdecency` is the brand's home — see
+[name and handles](06-marketing.md#name-and-handles) — but Phase 0 does not
+depend on it. A new account with no followers shows your posts to nobody,
+while an account that is recognisably you reaches people who already follow
+you. Post from both if you like; the signal you are measuring will come from
+the one that already has an audience.
+
 **What you are measuring** is not likes. It is:
 
 1. **"Where can I buy this?"** — the only comment that actually predicts a

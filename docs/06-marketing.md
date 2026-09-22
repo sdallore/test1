@@ -1,5 +1,25 @@
 # Getting traffic without ads
 
+## Name and handles
+
+The brand is **Department of Decency**. It is a civic-institution joke that
+matches the voice, and it gives every post a byline — *a memo from the
+Department of Decency*. It sits above the catalog rather than inside it, so no
+single shirt has to stay in the line-up to keep the name honest.
+
+- **TikTok** — `@deptofdecency`
+- **Instagram** — take `@deptofdecency` at the same time, even if you post
+  nothing there for months. Renaming across platforms later is miserable.
+- **Domain** — check `deptofdecency.com` before any artwork or packaging
+  carries a URL.
+
+Two things the name is not. It is not a real agency: nothing in the catalog
+claims federal affiliation, so the joke reads as a joke. And it is not a
+trademark you own — that only matters if this outgrows beer money, and by then
+you will know whether it is worth a filing fee.
+
+TikTok allows a username change every 30 days. None of this is permanent.
+
 ## The constraint
 
 Paid acquisition, the standard growth lever for print-on-demand, is largely
@@ -38,9 +58,11 @@ reveal, the "things that shouldn't be controversial" list, packing an order,
 the joke explained badly. Political humor travels further than product content
 — lead with the joke, show the shirt second.
 
-**2. Email list.** Popup on the store from day one. Offer 10% off. A 500-person
-list that opted in because they liked the joke converts better than any
-acquisition channel you could buy.
+**2. Email list.** Etsy owns the customer and will not hand you an address, so
+the list has to be built somewhere you control — a link in the social bio to a
+free form. A 500-person list that opted in because they liked the joke converts
+better than any acquisition channel you could buy, and it is the asset that
+survives if you ever leave Etsy.
 
 **3. Reddit, carefully.** Highly relevant and highly allergic to self-promotion.
 Read each subreddit's self-promo rules, participate for real, and only share
@@ -53,9 +75,11 @@ is roughly $300 all-in and will outperform $300 of ads you can't legally run.
 **5. Bluesky and X.** Low effort, occasional outsized hit. Good for testing
 which jokes land before committing artwork.
 
-**6. Etsy as a discovery channel.** Real search intent for political shirts.
-High fees and you don't own the customer, but it's traffic you don't have to
-manufacture. Worth revisiting once the Shopify store is live.
+**6. Etsy search.** Not a channel you build so much as one you show up in:
+real search intent for political shirts, and traffic you don't have to
+manufacture. Since Etsy is where Phase 1 sells, treat listing titles and tags
+as marketing copy rather than paperwork. High fees and no customer list are the
+price of it.
 
 ## The test-before-you-print loop
 
