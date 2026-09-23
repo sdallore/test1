@@ -18,6 +18,7 @@ import catalog  # noqa: E402
 import risk_check  # noqa: E402
 import art  # noqa: E402
 import prep_art  # noqa: E402
+import social_export  # noqa: E402
 import typeset  # noqa: E402
 import prompts  # noqa: E402
 import shopify_export  # noqa: E402
@@ -597,3 +598,76 @@ class TestTypeset(unittest.TestCase):
             self.assertTrue((typeset.FONT_DIR / f"{role}.ttf").exists())
         licences = list(typeset.FONT_DIR.glob("LICENSE-*"))
         self.assertGreaterEqual(len(licences), 3)
+
+
+class WeekOneScheduleTests(unittest.TestCase):
+    """The posting schedule is a catalog file, so it gets catalog rules."""
+
+    @classmethod
+    def setUpClass(cls):
+        with social_export.SCHEDULE.open(newline="") as fh:
+            cls.rows = list(csv.DictReader(fh))
+        cls.ids = {d.id for d in catalog.load()}
+
+    def test_seven_consecutive_days(self):
+        self.assertEqual([r["day"] for r in self.rows],
+                         [str(n) for n in range(1, 8)])
+
+    def test_every_design_day_names_a_live_design(self):
+        for row in self.rows:
+            if row["id"]:
+                self.assertIn(row["id"], self.ids,
+                              f"day {row['day']} posts {row['id']}, which is not in the catalog")
+
+    def test_no_design_is_posted_twice(self):
+        posted = [r["id"] for r in self.rows if r["id"]]
+        self.assertEqual(len(posted), len(set(posted)))
+
+    def test_all_five_designs_get_a_day(self):
+        posted = {r["id"] for r in self.rows if r["id"]}
+        self.assertEqual(posted, self.ids, "every design gets exactly one shot in week one")
+
+    def test_every_day_has_a_format_and_a_caption(self):
+        for row in self.rows:
+            self.assertTrue(row["format"].strip(), f"day {row['day']} has no format")
+            self.assertTrue(row["caption"].strip(), f"day {row['day']} has no caption")
+
+    def test_captions_fit_the_platform_limit(self):
+        # TikTok truncates at 2200 characters; Instagram matches it.
+        for row in self.rows:
+            self.assertLessEqual(len(row["caption"]), 2200, f"day {row['day']}")
+
+
+class SocialCardTests(unittest.TestCase):
+
+    def setUp(self):
+        self.design_id = sorted(d.id for d in catalog.load())[0]
+
+    def test_card_is_well_formed_svg_at_feed_size(self):
+        card = social_export.build_card(self.design_id)
+        root = ET.fromstring(card)
+        self.assertEqual(root.get("width"), str(social_export.W))
+        self.assertEqual(root.get("height"), str(social_export.H))
+
+    def test_art_stays_inside_the_safe_area(self):
+        """Platform furniture covers the edges; art that runs under it is lost."""
+        for viewbox in ("0 0 1200 1400", "0 0 1400 1200", "0 0 900 900"):
+            x, y, w, h = social_export.fit(viewbox)
+            self.assertGreaterEqual(x, social_export.SAFE_X)
+            self.assertGreaterEqual(y, social_export.SAFE_Y)
+            self.assertLessEqual(x + w, social_export.SAFE_X + social_export.SAFE_W)
+            self.assertLessEqual(y + h, social_export.SAFE_Y + social_export.SAFE_H)
+
+    def test_fit_preserves_aspect_ratio(self):
+        _, _, w, h = social_export.fit("0 0 1200 1400")
+        self.assertAlmostEqual(w / h, 1200 / 1400, places=2)
+
+    def test_handle_clears_the_caption_furniture(self):
+        self.assertLess(social_export.HANDLE_Y, 1500)
+        self.assertGreater(social_export.HANDLE_Y,
+                           social_export.SAFE_Y + social_export.SAFE_H)
+
+    def test_unwrap_rejects_art_without_a_viewbox(self):
+        with self.assertRaises(ValueError):
+            social_export.unwrap('<svg width="10" height="10"></svg>')
+

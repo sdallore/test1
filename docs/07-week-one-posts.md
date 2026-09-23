@@ -3,6 +3,22 @@
 Phase 0 of [the launch plan](05-launch-plan.md), written out. Cost: $0. The
 job this week is not sales. It is finding out whether a stranger laughs.
 
+## The kit
+
+`python3 src/social_export.py` builds everything this week needs into
+`build/posts/`: a 1080x1920 card per design, sized clear of the furniture each
+platform draws over your art, plus `captions.txt` with every caption ready to
+paste. The schedule itself lives in
+[`catalog/week-one.csv`](../catalog/week-one.csv) — edit a caption there and
+re-run rather than retyping it into an app.
+
+Posting stays manual. Both platforms forbid automated posting outside their own
+APIs, and the account most likely to get caught is a brand-new one with no
+history. To space the week out, use the schedulers they give you: TikTok's
+desktop uploader has a **Schedule video** toggle good for 10 days ahead, and
+Instagram schedules Reels and feed posts through **Meta Business Suite >
+Planner**. Both are first-party and neither risks the account.
+
 ## Rules for the week
 
 **Nothing is for sale, so don't pretend otherwise.** No link in bio, no "shop
