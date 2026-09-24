@@ -12,6 +12,14 @@ paste. The schedule itself lives in
 [`catalog/week-one.csv`](../catalog/week-one.csv) — edit a caption there and
 re-run rather than retyping it into an app.
 
+`python3 src/video_export.py` turns each card into a seven-second vertical
+clip: the hook held long enough to read, then a cut to the shirt with a slow
+push. **Post the video, not the still.** A static image earns about a second of
+watch time and the feed ranks on watch time, so a photo post of a single image
+is the weakest thing you can put up. The clips come out silent on purpose —
+add a sound in the app, because TikTok's audio library is its own discovery
+surface and a muted post gives that up.
+
 Posting stays manual. Both platforms forbid automated posting outside their own
 APIs, and the account most likely to get caught is a brand-new one with no
 history. To space the week out, use the schedulers they give you: TikTok's
@@ -51,6 +59,12 @@ there is, and one of them becomes Saturday's post.
 **Expect uneven reach.** Political organic content gets distributed
 inconsistently, and merch plus politics more so. One flat post is not a
 verdict on the joke. Three flat posts might be.
+
+**Day one reaching almost nobody is the normal outcome.** A new account's first
+post goes to a small test audience — often tens of people, not thousands. That
+is not the algorithm judging the joke; it is the algorithm having no idea who
+you are yet. Nothing about week one is legible until there are several posts to
+compare.
 
 ---
 

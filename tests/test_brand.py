@@ -19,6 +19,7 @@ import risk_check  # noqa: E402
 import art  # noqa: E402
 import prep_art  # noqa: E402
 import social_export  # noqa: E402
+import video_export  # noqa: E402
 import typeset  # noqa: E402
 import prompts  # noqa: E402
 import shopify_export  # noqa: E402
@@ -670,4 +671,61 @@ class SocialCardTests(unittest.TestCase):
     def test_unwrap_rejects_art_without_a_viewbox(self):
         with self.assertRaises(ValueError):
             social_export.unwrap('<svg width="10" height="10"></svg>')
+
+
+class HookCardTests(unittest.TestCase):
+    """The opening frame carries the hook; it has to be readable at a glance."""
+
+    def setUp(self):
+        with social_export.SCHEDULE.open(newline="") as fh:
+            self.hooks = [r["hook"] for r in csv.DictReader(fh) if r["hook"]]
+
+    def test_hook_card_is_well_formed_svg_at_feed_size(self):
+        for hook in self.hooks:
+            root = ET.fromstring(video_export.hook_card(hook))
+            self.assertEqual(root.get("width"), str(video_export.W))
+            self.assertEqual(root.get("height"), str(video_export.H))
+
+    def test_every_hook_fits_without_shrinking_past_readable(self):
+        for hook in self.hooks:
+            lines = video_export.wrap(hook, video_export.HOOK_SIZE,
+                                      video_export.HOOK_WIDTH)
+            self.assertLessEqual(len(lines), 4, f"too long for one frame: {hook}")
+
+    def test_wrapped_lines_stay_inside_the_measure(self):
+        for hook in self.hooks:
+            for line in video_export.wrap(hook, video_export.HOOK_SIZE,
+                                          video_export.HOOK_WIDTH):
+                w = typeset.measure(line, "voice", video_export.HOOK_SIZE)
+                self.assertLessEqual(round(w), video_export.HOOK_WIDTH, line)
+
+    def test_wrap_never_drops_or_reorders_words(self):
+        for hook in self.hooks:
+            lines = video_export.wrap(hook, video_export.HOOK_SIZE,
+                                      video_export.HOOK_WIDTH)
+            self.assertEqual(" ".join(lines).split(), hook.split())
+
+    def test_a_single_unbreakable_word_still_produces_a_line(self):
+        self.assertEqual(video_export.wrap("Supercalifragilistic", 76, 10),
+                         ["Supercalifragilistic"])
+
+    def test_hook_type_is_outlined_not_live_text(self):
+        """Same rule as the print art: no <text>, so no font to embed."""
+        card = video_export.hook_card(self.hooks[0])
+        self.assertNotIn("<text", card)
+        self.assertIn("<path", card)
+
+
+class ClipTimingTests(unittest.TestCase):
+
+    def test_clip_is_short_enough_to_finish_before_a_thumb_moves(self):
+        total = video_export.HOOK_SECONDS + video_export.CARD_SECONDS
+        self.assertLessEqual(total, 8.0)
+
+    def test_hook_is_held_long_enough_to_read(self):
+        self.assertGreaterEqual(video_export.HOOK_SECONDS, 2.0)
+
+    def test_zoom_is_a_push_not_a_lurch(self):
+        self.assertGreater(video_export.ZOOM_TO, 1.0)
+        self.assertLessEqual(video_export.ZOOM_TO, 1.2)
 
