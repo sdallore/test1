@@ -729,3 +729,58 @@ class ClipTimingTests(unittest.TestCase):
         self.assertGreater(video_export.ZOOM_TO, 1.0)
         self.assertLessEqual(video_export.ZOOM_TO, 1.2)
 
+
+class HashtagTests(unittest.TestCase):
+    """Tags are a small lever, and the wrong ones actively cost reach."""
+
+    # Reach other sellers, not buyers.
+    SELLER = {"#printondemand", "#tshirtdesign", "#smallbusiness", "#etsyseller",
+              "#etsyshop", "#merch", "#dropshipping", "#shopsmall"}
+    # Too broad to carry information.
+    BROAD = {"#fyp", "#foryou", "#foryoupage", "#viral", "#trending", "#xyzbca"}
+    # Hands the classifier the signal that throttles commercial political posts.
+    POLITICAL = {"#politics", "#political", "#politicalshirts", "#leftist",
+                 "#liberal", "#progressive", "#resist", "#vote"}
+
+    @classmethod
+    def setUpClass(cls):
+        with social_export.SCHEDULE.open(newline="") as fh:
+            cls.rows = list(csv.DictReader(fh))
+
+    def tags(self, row):
+        return set(row["hashtags"].split())
+
+    def test_every_design_day_carries_tags(self):
+        for row in self.rows:
+            if row["id"]:
+                self.assertTrue(row["hashtags"].strip(), f"day {row['day']}")
+
+    def test_three_to_five_tags(self):
+        for row in self.rows:
+            if row["hashtags"]:
+                self.assertIn(len(self.tags(row)), range(3, 6), f"day {row['day']}")
+
+    def test_no_seller_tags(self):
+        for row in self.rows:
+            self.assertFalse(self.tags(row) & self.SELLER, f"day {row['day']}")
+
+    def test_no_firehose_tags(self):
+        for row in self.rows:
+            self.assertFalse(self.tags(row) & self.BROAD, f"day {row['day']}")
+
+    def test_no_bare_political_tags(self):
+        for row in self.rows:
+            self.assertFalse(self.tags(row) & self.POLITICAL, f"day {row['day']}")
+
+    def test_tags_are_well_formed(self):
+        for row in self.rows:
+            for tag in self.tags(row):
+                self.assertTrue(tag.startswith("#"), tag)
+                self.assertTrue(tag[1:].isalnum(), tag)
+                self.assertEqual(tag, tag.lower(), tag)
+
+    def test_no_two_days_share_a_tag_block(self):
+        """Identical blocks across posts read as automation."""
+        blocks = [r["hashtags"] for r in self.rows if r["hashtags"]]
+        self.assertEqual(len(blocks), len(set(blocks)))
+

@@ -81,6 +81,42 @@ manufacture. Since Etsy is where Phase 1 sells, treat listing titles and tags
 as marketing copy rather than paperwork. High fees and no customer list are the
 price of it.
 
+## Hashtags
+
+They matter less than they used to. TikTok ranks mostly on what the post
+actually is — on-screen text, caption wording, how long people watch — and
+its search has become a real discovery surface in its own right. A keyword in
+the caption that someone might type does more than a tag.
+
+So the rule is **three to five tags that say who this is for**, and then stop
+thinking about it.
+
+**Broad tags are worthless.** `#fyp`, `#foryou`, `#viral` put you against
+billions of posts and tell the ranker nothing it didn't know.
+
+**Seller tags are worse than worthless.** `#printondemand`, `#tshirtdesign`,
+`#smallbusiness` reach other people selling shirts. Those accounts don't buy
+shirts, and an audience of competitors teaches the algorithm to keep showing
+you to competitors.
+
+**Tag the subject, not the politics.** This is the one that costs reach if you
+get it wrong. Political organic content already gets distributed
+inconsistently, and commercial political content more so — tagging your own
+merch `#politicalshirts` or `#leftist` hands the classifier exactly the
+signal that limits it. The joke's *subject* is the better door: medical bills,
+group projects, banned books, the group chat. Those are big, healthy,
+mostly-unpoliticised topics where the audience already lives, and the shirt is
+political once they're watching.
+
+**Check the count in the app.** Type each tag into the field before posting —
+TikTok shows how many posts carry it. Anything past a few million is a firehose
+you'll drown in. Narrow is the point.
+
+**Don't paste the same block every day.** Identical tag sets across posts read
+as automation. The per-day sets live in
+[`catalog/week-one.csv`](../catalog/week-one.csv) and come out in
+`captions.txt`.
+
 ## The test-before-you-print loop
 
 This is no longer a tip. It is the plan — see `05-launch-plan.md`, Phase 0.

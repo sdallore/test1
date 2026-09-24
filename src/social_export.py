@@ -122,7 +122,10 @@ def captions(rows: list[dict[str, str]], slogans: dict[str, str]) -> str:
         out += [f"DAY {row['day']} — {slogan}", f"  format: {row['format']}"]
         if row["hook"]:
             out.append(f"  first frame on screen: {row['hook']}")
-        out += ["", f"{row['caption']}", "", "-" * 34, ""]
+        caption = row["caption"]
+        if row["hashtags"]:
+            caption = f"{caption}\n\n{row['hashtags']}"
+        out += ["", caption, "", "-" * 34, ""]
     out += [
         "Posting is manual on purpose. Both platforms forbid automated posting",
         "outside their own APIs, and a new account is the easiest to suspend.",
@@ -133,6 +136,12 @@ def captions(rows: list[dict[str, str]], slogans: dict[str, str]) -> str:
         "",
         "Leave the first hour after each post free. Replying is the growth",
         "mechanism, and day 6's post is made out of a comment you have to read.",
+        "",
+        "On the tags: type each one into TikTok's field before you post. The app",
+        "shows the post count, which is the check that matters -- swap anything",
+        "over a few million for something narrower. Broad tags (#fyp, #viral)",
+        "tell the system nothing, and seller tags (#printondemand, #tshirtdesign)",
+        "reach other sellers rather than buyers.",
         "",
     ]
     return "\n".join(out)
